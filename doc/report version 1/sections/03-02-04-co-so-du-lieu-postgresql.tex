@@ -1,0 +1,93 @@
+\subsubsection{Cơ sở dữ liệu -- PostgreSQL}
+\label{subsubsec:co-so-du-lieu-postgresql}
+
+Cơ sở dữ liệu của hệ thống dự kiến được thiết kế trên PostgreSQL, lưu trữ
+tập trung dữ liệu phục vụ cả phân hệ quản trị viên và người sử dụng.
+Thiết kế hướng đến việc đáp ứng các chức năng trong đề bài, hạn chế dữ liệu
+trùng lặp và bảo đảm tính nhất quán giữa các thông tin có liên quan.
+
+Các nhóm dữ liệu dự kiến gồm:
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|L{2cm}|L{4cm}|L{3cm}|L{\dimexpr\textwidth-9cm-8\tabcolsep-5\arrayrulewidth\relax}|}
+  \caption{Các nhóm dữ liệu dự kiến và phạm vi thao tác}
+  \label{tab:nhom-du-lieu-va-pham-vi}\\
+  \hline
+  \textbf{Nhóm dữ liệu} & \textbf{Nội dung dự kiến lưu trữ} &
+  \textbf{Mục đích} & \textbf{Bên thao tác và phạm vi}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Nhóm dữ liệu} & \textbf{Nội dung dự kiến lưu trữ} &
+  \textbf{Mục đích} & \textbf{Bên thao tác và phạm vi}\\
+  \hline
+  \endhead
+  Tài khoản &
+  Tên đăng nhập, mật khẩu đã băm, hồ sơ cá nhân, quyền và trạng thái tài khoản &
+  Phục vụ đăng nhập, phân quyền và quản lý người dùng &
+  \textbf{User:} đăng ký, cập nhật hồ sơ và mật khẩu của mình.
+  \textbf{Admin:} xem, thêm, cập nhật, xóa, khóa/mở khóa tài khoản và cập nhật
+  mật khẩu theo quyền quản trị.\\
+  \hline
+  Quan hệ bạn bè &
+  Yêu cầu kết bạn, trạng thái xử lý, quan hệ bạn bè và danh sách chặn &
+  Phục vụ kết nối và quản lý quan hệ giữa người dùng &
+  \textbf{User:} gửi, chấp nhận/từ chối yêu cầu, hủy kết bạn và chặn tài khoản.
+  \textbf{Admin:} xem danh sách bạn bè và thống kê số lượng bạn bè.\\
+  \hline
+  Hội thoại và tin nhắn &
+  Người tham gia, người gửi, nội dung và thời điểm gửi tin nhắn &
+  Phục vụ chat, lưu lịch sử và truy xuất tin nhắn khi người nhận quay lại &
+  \textbf{User:} gửi, xem, tìm kiếm và xóa lịch sử thuộc phạm vi được phép.
+  \textbf{Backend:} kiểm tra quyền tham gia, lưu và chuyển tin nhắn.\\
+  \hline
+  Nhóm chat &
+  Tên nhóm, thời điểm tạo, thành viên và quyền quản trị trong nhóm &
+  Phục vụ quản lý và trao đổi tin nhắn theo nhóm &
+  \textbf{User:} tạo nhóm và thực hiện các thao tác theo quyền.
+  \textbf{Admin nhóm:} xóa thành viên theo quy định.
+  \textbf{Admin hệ thống:} xem danh sách nhóm, thành viên và admin nhóm.\\
+  \hline
+  Báo cáo spam &
+  Người báo cáo, tài khoản bị báo cáo, nội dung liên quan và thời điểm báo cáo &
+  Hỗ trợ quản trị viên xem xét và xử lý &
+  \textbf{User:} gửi báo cáo spam.
+  \textbf{Admin:} xem, lọc, sắp xếp báo cáo và yêu cầu khóa tài khoản bị báo cáo.\\
+  \hline
+  Đăng nhập và hoạt động &
+  Lịch sử đăng nhập, thời điểm mở ứng dụng và dữ liệu liên quan đến hoạt động chat &
+  Phục vụ theo dõi và thống kê theo khoảng thời gian &
+  \textbf{Backend:} ghi nhận dữ liệu từ các sự kiện của hệ thống.
+  \textbf{Admin:} xem lịch sử, danh sách hoạt động và biểu đồ thống kê.\\
+  \hline
+\end{longtable}
+\endgroup
+
+``Bên thao tác'' chỉ chủ thể khởi tạo hoặc sử dụng chức năng. Mọi thao tác
+đọc/ghi PostgreSQL đều được thực hiện qua backend sau khi kiểm tra quyền;
+Admin và User không truy cập trực tiếp CSDL.
+
+Các nhóm dữ liệu trên là cơ sở để xác định các bảng và mối quan hệ,
+không mặc định mỗi nhóm tương ứng với một bảng. Thiết kế chi tiết sẽ xác định
+khóa chính, khóa ngoại và các ràng buộc phù hợp để hạn chế bản ghi trùng lặp
+hoặc tham chiếu không hợp lệ.
+
+Đối với các thao tác làm thay đổi nhiều dữ liệu liên quan, nhóm dự kiến sử dụng
+giao dịch để bảo đảm các thay đổi được thực hiện đồng bộ. Chẳng hạn, khi
+chấp nhận yêu cầu kết bạn, việc cập nhật trạng thái yêu cầu và ghi nhận
+quan hệ bạn bè cần được xử lý trong cùng một giao dịch.
+
+Backend dự kiến truy cập PostgreSQL thông qua DAO và JDBC. Thông tin kết nối
+được quản lý tại backend; Admin Client và User Client chỉ trao đổi yêu cầu,
+kết quả với server qua socket TCP.
+
+Thiết kế logic dưới đây cụ thể hóa các nhóm dữ liệu thành các thực thể,
+thuộc tính, khóa và quan hệ dự kiến. Nội dung được dùng làm căn cứ xây dựng
+script tạo CSDL trong V1; việc kết nối và xử lý dữ liệu từ ứng dụng thuộc
+giai đoạn triển khai chức năng tiếp theo.
+
+\input{sections/database/01-so-do-erd}
+\input{sections/database/02-tu-dien-du-lieu}
+\input{sections/database/03-quan-he-va-rang-buoc}

@@ -1,0 +1,117 @@
+\paragraph{Các quan hệ chính}
+\mbox{}\par
+
+Một tài khoản có thể gửi hoặc nhận nhiều yêu cầu kết bạn, xuất hiện trong
+nhiều quan hệ bạn bè và quan hệ chặn, đồng thời tham gia nhiều hội thoại.
+Với các quan hệ có hai vai trò, hai thuộc tính cùng tham chiếu đến
+\texttt{UserAccount.id} nhưng có ý nghĩa khác nhau, chẳng hạn người gửi
+và người nhận yêu cầu kết bạn.
+
+\begin{itemize}
+  \item \textbf{Tài khoản và quan hệ bạn bè:}
+    \texttt{FriendRequest.senderId} và \texttt{receiverId},
+    hai thuộc tính của khóa chính \texttt{Friendship},
+    cùng \texttt{UserBlock.blockerId} và \texttt{blockedUserId}
+    đều tham chiếu đến tài khoản tương ứng.
+  \item \textbf{Tài khoản và hội thoại:}
+    \texttt{Conversation.creatorId} tham chiếu người tạo.
+    Quan hệ nhiều--nhiều giữa tài khoản và hội thoại được tách qua
+    \texttt{ConversationMember}, có khóa chính kép
+    \texttt{(conversationId, userId)}.
+  \item \textbf{Hội thoại và tin nhắn:}
+    mỗi tin nhắn thuộc một hội thoại. Cặp
+    \texttt{(conversationId, senderId)} trong \texttt{Message}
+    tham chiếu khóa chính của \texttt{ConversationMember}, giúp bảo đảm
+    người gửi có bản ghi thành viên trong đúng hội thoại.
+    Điều kiện còn đang tham gia tại thời điểm gửi cần được backend kiểm tra thêm.
+  \item \textbf{Tin nhắn và lịch sử cá nhân:}
+    \texttt{HiddenMessage} liên kết một người dùng với một tin nhắn.
+    Khóa chính kép \texttt{(userId, messageId)} ngăn ghi nhận trùng
+    cùng một lần ẩn tin của người dùng đó.
+  \item \textbf{Tin nhắn và báo cáo spam:}
+    \texttt{SpamReport} tham chiếu người báo cáo, tài khoản bị báo cáo
+    và tin nhắn liên quan; một tin nhắn có thể xuất hiện trong nhiều báo cáo.
+  \item \textbf{Tài khoản và hoạt động:}
+    mỗi bản ghi \texttt{LoginHistory} hoặc \texttt{AppOpenEvent}
+    thuộc một tài khoản; một tài khoản có thể có nhiều bản ghi theo thời gian.
+\end{itemize}
+
+\paragraph{Ràng buộc và quy tắc dữ liệu dự kiến}
+\mbox{}\par
+
+Các khóa chính, khóa ngoại và ràng buộc duy nhất được dự kiến thể hiện trong
+CSDL. Những quy tắc liên quan đến quyền truy cập, trạng thái tham gia hoặc
+thay đổi đồng thời nhiều bản ghi cần được kiểm tra thêm tại backend;
+không xem các khóa trong ERD là đủ để thực hiện toàn bộ nghiệp vụ.
+
+\begin{enumerate}
+  \item \textbf{Tài khoản:} tên đăng nhập và email là duy nhất;
+    mật khẩu được lưu dưới dạng đã băm. \texttt{systemRole} phân biệt
+    Admin hệ thống với User; \texttt{status} phân biệt tài khoản đang hoạt động
+    với tài khoản bị khóa.
+  \item \textbf{Bạn bè và chặn:} hai người trong một quan hệ phải khác nhau.
+    \texttt{Friendship} lưu cặp ID theo quy ước
+    \texttt{userId1 < userId2}, kết hợp khóa chính kép để không lưu
+    hai chiều của cùng một quan hệ. Quan hệ chặn có hướng nên A chặn B
+    không đồng nghĩa B chặn A.
+  \item \textbf{Hội thoại và thành viên:} \texttt{type} nhận
+    \texttt{PRIVATE} hoặc \texttt{GROUP}; tên nhóm được dùng cho hội thoại nhóm.
+    Hội thoại riêng có hai người tham gia; khi tạo nhóm cần người tạo và
+    ít nhất một người dùng khác. Khóa chính kép của thành viên ngăn một
+    người xuất hiện hai lần trong cùng hội thoại.
+  \item \textbf{Quyền trong nhóm:} \texttt{memberRole} nhận
+    \texttt{ADMIN} hoặc \texttt{MEMBER}, độc lập với quyền quản trị hệ thống.
+    Chỉ admin nhóm được xóa thành viên theo yêu cầu đề bài.
+    Khi gửi tin, backend cần kiểm tra trạng thái thành viên và quyền hiện tại.
+  \item \textbf{Báo cáo spam:} người báo cáo phải có quyền xem nội dung
+    liên quan; tin nhắn được báo cáo phải thuộc tài khoản bị báo cáo.
+    Backend cần kiểm tra các điều kiện này ngoài việc kiểm tra các khóa ngoại.
+  \item \textbf{Tính đồng bộ:} khi chấp nhận kết bạn, cập nhật yêu cầu và tạo
+    quan hệ bạn bè trong cùng giao dịch. Khi chặn và hủy kết bạn, các thay đổi
+    liên quan cũng cần được xử lý đồng bộ để tránh trạng thái mâu thuẫn.
+\end{enumerate}
+
+\paragraph{Xóa lịch sử và mã hóa nhóm}
+\mbox{}\par
+
+Thiết kế đề xuất hiểu thao tác xóa lịch sử là xóa khỏi phía người thực hiện.
+\texttt{HiddenMessage} ghi nhận việc ẩn từng tin nhắn;
+\texttt{ConversationMember.historyClearedAt} xác định mốc xóa toàn bộ lịch sử
+cũ của thành viên. Khi truy xuất, các tin đã ẩn và tin trước mốc này
+không được hiển thị cho người đó; lịch sử của người tham gia khác không
+tự động bị xóa. Đây là cách hiểu cần nhóm thống nhất khi chốt thiết kế.
+
+Thuộc tính \texttt{Conversation.isEncrypted} chỉ ghi nhận trạng thái mã hóa
+của nhóm. ERD hiện tại chưa mô tả chi tiết dữ liệu phục vụ quản lý khóa,
+thay đổi khóa hoặc định dạng nội dung mã hóa; cần hoàn thiện phần này trước
+khi khẳng định thiết kế dữ liệu đã đáp ứng đầy đủ chức năng mã hóa nhóm.
+Tương tự, chính sách giữ lại hoặc xử lý dữ liệu liên quan khi xóa tài khoản
+cần được xác định trước khi chốt các hành vi của khóa ngoại trong script.
+
+\paragraph{Dữ liệu phục vụ thống kê}
+\mbox{}\par
+
+Mô hình không tạo bảng thống kê riêng khi số liệu có thể được tính từ
+các dữ liệu gốc. Các chức năng của Admin được đối chiếu như sau:
+
+\begin{itemize}
+  \item \hyperlink{F14}{F14}: lấy các lượt đăng nhập từ
+    \texttt{LoginHistory}, kết hợp hồ sơ tài khoản và sắp xếp theo thời gian.
+  \item \hyperlink{F17}{F17}--\hyperlink{F18}{F18}: lọc
+    \texttt{UserAccount.createdAt} theo khoảng thời gian; tổng hợp số tài khoản
+    tạo mới theo tháng của năm được chọn.
+  \item \hyperlink{F19}{F19}: đếm quan hệ trong \texttt{Friendship};
+    khi tính cả bạn của bạn, dự kiến loại chính người đang xét và loại trùng
+    các tài khoản xuất hiện qua nhiều quan hệ. Cách tính tổng này cần được
+    thống nhất khi chốt tiêu chí thống kê.
+  \item \hyperlink{F20}{F20}: đếm lượt mở ứng dụng từ
+    \texttt{AppOpenEvent}; đối chiếu tin nhắn, hội thoại và thành viên để
+    xác định số người và số nhóm có trao đổi trong khoảng thời gian chọn.
+  \item \hyperlink{F21}{F21}: đếm các tài khoản khác nhau có mở ứng dụng
+    trong từng tháng, không dùng tổng số lượt mở thay cho số người hoạt động.
+\end{itemize}
+
+Lịch sử đăng nhập và lượt mở ứng dụng được tách riêng vì việc mở lại ứng dụng
+không nhất thiết là một lần đăng nhập mới. Trạng thái online/offline sẽ cần
+được backend xác định từ kết nối thực tế khi triển khai; một bản ghi đăng nhập
+cũ không đủ chứng minh người dùng đang online.

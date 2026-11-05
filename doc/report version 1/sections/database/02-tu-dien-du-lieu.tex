@@ -1,0 +1,161 @@
+\paragraph{Từ điển dữ liệu}
+\mbox{}\par
+
+Bảng dưới đây mô tả các thuộc tính của 11 thực thể trong ERD. Với khóa chính
+kép, các thuộc tính có ký hiệu PK trong cùng thực thể cùng tạo thành một khóa;
+không yêu cầu từng thuộc tính riêng lẻ là duy nhất. Các thuộc tính không có
+dấu hỏi trong hình được dự kiến có giá trị; những trường có thể trống được
+nêu riêng trong cột khóa và khả dụng.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|L{3.6cm}|L{1.8cm}|L{2.9cm}|L{\dimexpr\textwidth-8.3cm-8\tabcolsep-5\arrayrulewidth\relax}|}
+  \caption{Các thực thể và thuộc tính trong thiết kế CSDL}
+  \label{tab:tu-dien-du-lieu}\\
+  \hline
+  \textbf{Thuộc tính} & \textbf{Kiểu logic} & \textbf{Khóa và khả dụng} & \textbf{Ý nghĩa}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Thuộc tính} & \textbf{Kiểu logic} & \textbf{Khóa và khả dụng} & \textbf{Ý nghĩa}\\
+  \hline
+  \endhead
+  \multicolumn{4}{|l|}{\textbf{UserAccount}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh tài khoản.\\
+  \hline
+  \texttt{username} & \texttt{varchar} & UK; Bắt buộc & Tên đăng nhập duy nhất; quy tắc chuẩn hóa chữ hoa/thường cần thống nhất khi tạo CSDL.\\
+  \hline
+  \texttt{passwordHash} & \texttt{varchar} & Bắt buộc & Giá trị băm mật khẩu; không lưu mật khẩu dạng văn bản rõ.\\
+  \hline
+  \texttt{fullName} & \texttt{varchar} & Bắt buộc & Họ tên của người dùng.\\
+  \hline
+  \texttt{address} & \texttt{varchar} & Có thể trống & Địa chỉ trong hồ sơ cá nhân.\\
+  \hline
+  \texttt{birthDate} & \texttt{date} & Có thể trống & Ngày sinh, tách biệt với các thời điểm ghi nhận hoạt động.\\
+  \hline
+  \texttt{gender} & \texttt{varchar} & Bắt buộc & Giới tính trong hồ sơ cá nhân.\\
+  \hline
+  \texttt{email} & \texttt{varchar} & UK; Bắt buộc & Email duy nhất, phục vụ liên hệ và khởi tạo lại mật khẩu.\\
+  \hline
+  \texttt{systemRole} & \texttt{varchar} & Bắt buộc & Quyền hệ thống: \texttt{ADMIN} hoặc \texttt{USER}.\\
+  \hline
+  \texttt{status} & \texttt{varchar} & Bắt buộc & Trạng thái tài khoản: \texttt{ACTIVE} hoặc \texttt{LOCKED}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Bắt buộc & Thời điểm tạo tài khoản, phục vụ thống kê đăng ký mới.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{FriendRequest}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh yêu cầu kết bạn.\\
+  \hline
+  \texttt{senderId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản gửi yêu cầu, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{receiverId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản nhận yêu cầu, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{status} & \texttt{varchar} & Bắt buộc & Trạng thái \texttt{PENDING}, \texttt{ACCEPTED} hoặc \texttt{DECLINED}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Bắt buộc & Thời điểm gửi yêu cầu.\\
+  \hline
+  \texttt{respondedAt} & \texttt{timestamp} & Có thể trống & Thời điểm đồng ý hoặc từ chối; có thể trống khi đang chờ.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{Friendship}}\\*
+  \hline
+  \texttt{userId1} & \texttt{bigint} & PK kép, FK; Bắt buộc & Tài khoản thứ nhất; tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{userId2} & \texttt{bigint} & PK kép, FK; Bắt buộc & Tài khoản thứ hai; tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Bắt buộc & Thời điểm xác lập quan hệ bạn bè.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{UserBlock}}\\*
+  \hline
+  \texttt{blockerId} & \texttt{bigint} & PK kép, FK; Bắt buộc & Tài khoản chủ động chặn, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{blockedUserId} & \texttt{bigint} & PK kép, FK; Bắt buộc & Tài khoản bị chặn, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Bắt buộc & Thời điểm tạo quan hệ chặn.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{Conversation}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh hội thoại.\\
+  \hline
+  \texttt{type} & \texttt{varchar} & Bắt buộc & Loại hội thoại: \texttt{PRIVATE} hoặc \texttt{GROUP}.\\
+  \hline
+  \texttt{groupName} & \texttt{varchar} & Có thể trống & Tên nhóm; không dùng cho hội thoại riêng.\\
+  \hline
+  \texttt{creatorId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản tạo hội thoại, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{isEncrypted} & \texttt{boolean} & Bắt buộc & Cờ đánh dấu nhóm có sử dụng mã hóa; không thay thế dữ liệu quản lý khóa.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Bắt buộc & Thời điểm tạo hội thoại hoặc nhóm chat.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{ConversationMember}}\\*
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & PK kép, FK; Bắt buộc & Hội thoại tham gia, tham chiếu \texttt{Conversation.id}.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & PK kép, FK; Bắt buộc & Người tham gia, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{memberRole} & \texttt{varchar} & Bắt buộc & Quyền trong hội thoại: \texttt{ADMIN} hoặc \texttt{MEMBER}; khác quyền hệ thống.\\
+  \hline
+  \texttt{joinedAt} & \texttt{timestamp} & Bắt buộc & Thời điểm tham gia hội thoại.\\
+  \hline
+  \texttt{leftAt} & \texttt{timestamp} & Có thể trống & Thời điểm rời hoặc bị xóa khỏi nhóm; có thể trống khi còn tham gia.\\
+  \hline
+  \texttt{historyClearedAt} & \texttt{timestamp} & Có thể trống & Mốc ẩn toàn bộ lịch sử cũ đối với thành viên này, theo cách hiểu xóa riêng từng người.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{Message}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh tin nhắn.\\
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & FK; Bắt buộc & Hội thoại chứa tin, tham chiếu \texttt{Conversation.id}; đồng thời thuộc khóa ngoại kép của người gửi.\\
+  \hline
+  \texttt{senderId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản gửi; cùng \texttt{conversationId} tham chiếu cặp khóa của \texttt{ConversationMember}.\\
+  \hline
+  \texttt{content} & \texttt{text} & Bắt buộc & Nội dung tin nhắn. Cách lưu nội dung mã hóa cần được thiết kế thêm.\\
+  \hline
+  \texttt{sentAt} & \texttt{timestamp} & Bắt buộc & Thời điểm gửi tin nhắn, dùng sắp xếp lịch sử và lọc theo thời gian.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{HiddenMessage}}\\*
+  \hline
+  \texttt{userId} & \texttt{bigint} & PK kép, FK; Bắt buộc & Người ẩn tin nhắn, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{messageId} & \texttt{bigint} & PK kép, FK; Bắt buộc & Tin nhắn bị ẩn, tham chiếu \texttt{Message.id}.\\
+  \hline
+  \texttt{hiddenAt} & \texttt{timestamp} & Bắt buộc & Thời điểm người dùng ẩn tin khỏi lịch sử của mình.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{SpamReport}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh báo cáo spam.\\
+  \hline
+  \texttt{reporterId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản báo cáo, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{reportedUserId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản bị báo cáo, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{messageId} & \texttt{bigint} & FK; Bắt buộc & Tin nhắn liên quan, tham chiếu \texttt{Message.id}.\\
+  \hline
+  \texttt{reason} & \texttt{text} & Bắt buộc & Lý do hoặc mô tả nội dung báo cáo.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Bắt buộc & Thời điểm gửi báo cáo, dùng để lọc và sắp xếp.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{LoginHistory}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh lượt đăng nhập.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản đăng nhập, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{loggedInAt} & \texttt{timestamp} & Bắt buộc & Thời điểm đăng nhập thành công.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{AppOpenEvent}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Bắt buộc & Định danh lượt mở ứng dụng.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & FK; Bắt buộc & Tài khoản được ghi nhận hoạt động, tham chiếu \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{openedAt} & \texttt{timestamp} & Bắt buộc & Thời điểm mở ứng dụng, phục vụ thống kê lượt mở và người hoạt động.\\
+  \hline
+\end{longtable}
+\endgroup
+
+Các thuộc tính thời gian dùng để sắp xếp và thống kê cần được lưu, diễn giải
+thống nhất về múi giờ khi tạo script và kết nối JDBC. Tên đăng nhập, email,
+trạng thái tài khoản và trạng thái yêu cầu cũng cần có quy ước giá trị nhất quán.

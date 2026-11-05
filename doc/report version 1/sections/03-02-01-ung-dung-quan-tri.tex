@@ -1,0 +1,70 @@
+\subsubsection{Ứng dụng quản trị viên -- Java Swing}
+\label{subsubsec:client-admin}
+
+Ứng dụng quản trị viên được định hướng xây dựng bằng Java Swing trên Windows,
+phục vụ quản lý và theo dõi hệ thống. Danh mục dưới đây xác định mã chức năng
+để đối chiếu với các công việc ở mục~\ref{subsec:ke-hoach-phan-cong}.
+Phân hệ của các chức năng trong bảng
+là Admin hệ thống; không đồng nhất với vai trò admin nhóm chat.
+
+\begingroup
+\small
+\begin{longtable}{|C{1.2cm}|L{\dimexpr\textwidth-1.2cm-4\tabcolsep-3\arrayrulewidth\relax}|}
+  \caption{Danh mục chức năng của phân hệ quản trị viên}
+  \label{tab:chuc-nang-admin}\\
+  \hline
+  \textbf{Mã} & \textbf{Chức năng và phạm vi}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Mã} & \textbf{Chức năng và phạm vi}\\
+  \hline
+  \endhead
+  \hypertarget{F13}{\texttt{F13}} &
+  \textbf{Quản lý tài khoản:} xem, thêm, cập nhật, xóa; khóa/mở khóa tài khoản;
+  cập nhật mật khẩu; xem lịch sử đăng nhập và danh sách bạn bè của người dùng.
+  Thông tin người dùng gồm tên đăng nhập, họ tên, địa chỉ, ngày sinh,
+  giới tính và email.
+  Lọc theo tên, tên đăng nhập, trạng thái; sắp xếp theo tên hoặc ngày tạo.\\
+  \hline
+  \hypertarget{F14}{\texttt{F14}} &
+  \textbf{Xem danh sách đăng nhập:} hiển thị thời gian, tên đăng nhập và họ tên,
+  theo thứ tự thời gian.\\
+  \hline
+  \hypertarget{F15}{\texttt{F15}} &
+  \textbf{Xem nhóm chat:} lọc theo tên; sắp xếp theo tên hoặc thời gian tạo;
+  xem danh sách thành viên và admin của từng nhóm.\\
+  \hline
+  \hypertarget{F16}{\texttt{F16}} &
+  \textbf{Xem và xử lý báo cáo spam:} lọc theo thời gian, tên đăng nhập;
+  sắp xếp theo thời gian hoặc tên đăng nhập; khóa tài khoản bị báo cáo.\\
+  \hline
+  \hypertarget{F17}{\texttt{F17}} &
+  \textbf{Xem người dùng đăng ký mới:} chọn khoảng thời gian, lọc theo tên,
+  sắp xếp theo tên hoặc thời gian tạo.\\
+  \hline
+  \hypertarget{F18}{\texttt{F18}} &
+  \textbf{Biểu đồ đăng ký mới:} chọn năm và hiển thị số người đăng ký mới
+  theo từng tháng; trục hoành là tháng, trục tung là số người đăng ký mới.\\
+  \hline
+  \hypertarget{F19}{\texttt{F19}} &
+  \textbf{Thống kê bạn bè:} hiển thị số bạn trực tiếp và số lượng tính cả
+  bạn của bạn; lọc theo tên và số bạn trực tiếp với điều kiện bằng, nhỏ hơn
+  hoặc lớn hơn giá trị nhập; sắp xếp theo tên hoặc thời gian tạo.\\
+  \hline
+  \hypertarget{F20}{\texttt{F20}} &
+  \textbf{Xem người dùng hoạt động:} chọn khoảng thời gian; xem số lần mở
+  ứng dụng, số người và số nhóm đã chat; lọc theo tên và số lượng hoạt động
+  với điều kiện bằng, nhỏ hơn hoặc lớn hơn giá trị nhập;
+  sắp xếp theo tên hoặc thời gian tạo.\\
+  \hline
+  \hypertarget{F21}{\texttt{F21}} &
+  \textbf{Biểu đồ người dùng hoạt động:} chọn năm và hiển thị số người có
+  mở ứng dụng theo từng tháng; trục hoành là tháng, trục tung là số người
+  có mở ứng dụng.\\
+  \hline
+\end{longtable}
+\endgroup
+
+Trong V1, danh mục này dùng để đối chiếu các màn hình của phân hệ quản trị viên
+với yêu cầu, bao gồm các điều khiển thao tác, lọc và sắp xếp tương ứng.

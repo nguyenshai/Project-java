@@ -1,0 +1,2 @@
+-- Placeholder only. No database schema has been implemented yet.
+-- Implement the agreed Version 1 ERD here when database implementation begins.

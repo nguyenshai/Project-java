@@ -1,0 +1,339 @@
+<mxfile host="Electron">
+  <diagram id="chatapp-v1-erd" name="ERD dự thảo V1">
+    <mxGraphModel dx="3825" dy="971" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="2180" pageHeight="1570" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#172b4d;" value="ERD | HỆ THỐNG CHAT — VERSION 1" vertex="1">
+          <mxGeometry height="45" width="2080" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="request" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#6c8ebf;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="FriendRequest" vertex="1">
+          <mxGeometry height="202" width="330" x="40" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="request-f0" parent="request" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="request-f1" parent="request" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK senderId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="request-f2" parent="request" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK receiverId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="request-f3" parent="request" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="status : PENDING / ACCEPTED / DECLINED" vertex="1">
+          <mxGeometry height="26" width="330" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="request-f4" parent="request" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="createdAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="request-f5" parent="request" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="respondedAt : timestamp?" vertex="1">
+          <mxGeometry height="26" width="330" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="friendship" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#6c8ebf;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="Friendship" vertex="1">
+          <mxGeometry height="124" width="330" x="440" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="friendship-f0" parent="friendship" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK userId1 : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="friendship-f1" parent="friendship" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK userId2 : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="friendship-f2" parent="friendship" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="createdAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="block" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#6c8ebf;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="UserBlock" vertex="1">
+          <mxGeometry height="124" width="330" x="840" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="block-f0" parent="block" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK blockerId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="block-f1" parent="block" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK blockedUserId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="block-f2" parent="block" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="createdAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#dae8fc;swimlaneFillColor=#ffffff;strokeColor=#6c8ebf;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="UserAccount" vertex="1">
+          <mxGeometry height="332" width="330" x="440" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f0" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f1" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="UK username : varchar" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f2" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="passwordHash : varchar" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f3" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="fullName : varchar" vertex="1">
+          <mxGeometry height="26" width="330" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f4" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="address : varchar?" vertex="1">
+          <mxGeometry height="26" width="330" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f5" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="birthDate : date?" vertex="1">
+          <mxGeometry height="26" width="330" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f6" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="gender : varchar" vertex="1">
+          <mxGeometry height="26" width="330" y="194" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f7" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="UK email : varchar" vertex="1">
+          <mxGeometry height="26" width="330" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f8" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="systemRole : ADMIN / USER" vertex="1">
+          <mxGeometry height="26" width="330" y="246" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f9" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="status : ACTIVE / LOCKED" vertex="1">
+          <mxGeometry height="26" width="330" y="272" as="geometry" />
+        </mxCell>
+        <mxCell id="user-f10" parent="user" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="createdAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="298" as="geometry" />
+        </mxCell>
+        <mxCell id="login" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#e1d5e7;swimlaneFillColor=#ffffff;strokeColor=#9673a6;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="LoginHistory" vertex="1">
+          <mxGeometry height="124" width="330" x="-40" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="login-f0" parent="login" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="login-f1" parent="login" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK userId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="login-f2" parent="login" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="loggedInAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="app" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#e1d5e7;swimlaneFillColor=#ffffff;strokeColor=#9673a6;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="AppOpenEvent" vertex="1">
+          <mxGeometry height="124" width="330" x="-40" y="748" as="geometry" />
+        </mxCell>
+        <mxCell id="app-f0" parent="app" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="app-f1" parent="app" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK userId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="app-f2" parent="app" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="openedAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#d5e8d4;swimlaneFillColor=#ffffff;strokeColor=#82b366;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="Conversation" vertex="1">
+          <mxGeometry height="202" width="330" x="925" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation-f0" parent="conversation" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation-f1" parent="conversation" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="type : PRIVATE / GROUP" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation-f2" parent="conversation" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="groupName : varchar?" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation-f3" parent="conversation" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK creatorId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation-f4" parent="conversation" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="isEncrypted : boolean" vertex="1">
+          <mxGeometry height="26" width="330" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="conversation-f5" parent="conversation" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="createdAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="member" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#d5e8d4;swimlaneFillColor=#ffffff;strokeColor=#82b366;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="ConversationMember" vertex="1">
+          <mxGeometry height="202" width="330" x="925" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="member-f0" parent="member" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK conversationId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="member-f1" parent="member" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK userId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="member-f2" parent="member" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="memberRole : ADMIN / MEMBER" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="member-f3" parent="member" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="joinedAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="member-f4" parent="member" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="leftAt : timestamp?" vertex="1">
+          <mxGeometry height="26" width="330" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="member-f5" parent="member" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="historyClearedAt : timestamp?" vertex="1">
+          <mxGeometry height="26" width="330" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="message" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#d5e8d4;swimlaneFillColor=#ffffff;strokeColor=#82b366;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="Message" vertex="1">
+          <mxGeometry height="176" width="330" x="1450" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="message-f0" parent="message" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="message-f1" parent="message" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK conversationId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="message-f2" parent="message" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK senderId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="message-f3" parent="message" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="content : text" vertex="1">
+          <mxGeometry height="26" width="330" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="message-f4" parent="message" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="sentAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="hidden" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#d5e8d4;swimlaneFillColor=#ffffff;strokeColor=#82b366;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="HiddenMessage" vertex="1">
+          <mxGeometry height="124" width="330" x="1350" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="hidden-f0" parent="hidden" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK userId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="hidden-f1" parent="hidden" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK, FK messageId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="hidden-f2" parent="hidden" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="hiddenAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="spam" parent="1" style="swimlane;html=0;startSize=38;horizontal=1;rounded=0;collapsible=0;whiteSpace=wrap;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;strokeColor=#d79b00;fontColor=#172b4d;fontFamily=Arial;fontSize=18;fontStyle=1;align=center;" value="SpamReport" vertex="1">
+          <mxGeometry height="202" width="330" x="1950" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="spam-f0" parent="spam" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=1;fontColor=#172b4d;" value="PK id : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="spam-f1" parent="spam" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK reporterId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="spam-f2" parent="spam" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK reportedUserId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="spam-f3" parent="spam" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="FK messageId : bigint" vertex="1">
+          <mxGeometry height="26" width="330" y="116" as="geometry" />
+        </mxCell>
+        <mxCell id="spam-f4" parent="spam" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="reason : text" vertex="1">
+          <mxGeometry height="26" width="330" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="spam-f5" parent="spam" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;overflow=hidden;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#172b4d;" value="createdAt : timestamp" vertex="1">
+          <mxGeometry height="26" width="330" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="e01" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;exitX=0.1;exitY=0;exitDx=0;exitDy=0;entryX=0.35;entryY=1;entryDx=0;entryDy=0;" target="request" value="senderId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="473.07" y="470" />
+              <mxPoint x="155.47" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e02" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;exitX=0.22;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="request" value="receiverId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="512.67" y="420" />
+              <mxPoint x="287.47" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e03" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;exitX=0.38;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" target="friendship" value="userId1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="565" y="370" />
+              <mxPoint x="539" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e04" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;exitX=0.52;exitY=0;exitDx=0;exitDy=0;" value="userId2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="611.57" y="284" />
+            </Array>
+            <mxPoint x="611.57" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e05" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;exitX=0.7;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" target="block" value="blockerId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="671" y="360" />
+              <mxPoint x="939" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e06" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;exitX=0.84;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;" target="block" value="blockedUserId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="717.22" y="400" />
+              <mxPoint x="1071" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e07" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#9673a6;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#9673a6;labelBackgroundColor=#ffffff;exitX=0;exitY=0.2;exitDx=0;exitDy=0;" value="userId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="606.42" />
+              <mxPoint x="310" y="606.42" />
+            </Array>
+            <mxPoint x="290" y="606.42" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e08" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#9673a6;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#9673a6;labelBackgroundColor=#ffffff;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="app" value="userId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440.03" y="810.03" />
+            </Array>
+            <mxPoint x="440" y="810" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e09" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=1;exitY=0.12;exitDx=0;exitDy=0;entryX=0;entryY=0.22;entryDx=0;entryDy=0;" target="conversation" value="creatorId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="835" y="580" />
+              <mxPoint x="835" y="584" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=1;exitY=0.82;exitDx=0;exitDy=0;entryX=0;entryY=0.42;entryDx=0;entryDy=0;" target="member" value="userId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="825" y="812" />
+              <mxPoint x="825" y="985" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="conversation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="member" value="conversationId">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="conversation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.868;entryDx=0;entryDy=0;entryPerimeter=0;" target="message-f0" value="conversationId">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="member" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=1;exitY=0.55;exitDx=0;exitDy=0;entryX=0.32;entryY=1;entryDx=0;entryDy=0;dashed=1;" target="message" value="(conversationId, senderId)">
+          <mxGeometry relative="1" x="0.2603" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1310" y="1011.11" />
+              <mxPoint x="1310" y="820" />
+              <mxPoint x="1555.56" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="message" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" target="hidden" value="messageId">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#82b366;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#82b366;labelBackgroundColor=#ffffff;exitX=0.62;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" target="hidden" value="userId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="645" y="1190" />
+              <mxPoint x="1449" y="1190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#d79b00;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#d79b00;labelBackgroundColor=#ffffff;exitX=0.94;exitY=0;exitDx=0;exitDy=0;entryX=0.28;entryY=0;entryDx=0;entryDy=0;" target="spam" value="reporterId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750.18" y="450.06" />
+              <mxPoint x="2042.41" y="450.06" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#d79b00;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#d79b00;labelBackgroundColor=#ffffff;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="spam" value="reportedUserId">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790.06" y="540.06" />
+              <mxPoint x="790.06" y="490.06" />
+              <mxPoint x="2197.47" y="490.06" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="message" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=24;html=0;startArrow=ERmandOne;startFill=0;startSize=14;endArrow=ERzeroToMany;endFill=0;endSize=16;strokeColor=#d79b00;strokeWidth=1.5;fontSize=13;fontFamily=Arial;fontColor=#d79b00;labelBackgroundColor=#ffffff;exitX=1;exitY=0.55;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="spam-f2" value="messageId">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

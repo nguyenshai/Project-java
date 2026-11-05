@@ -1,0 +1,70 @@
+\subsubsection{Ứng dụng người sử dụng -- Java Swing}
+\label{subsubsec:client-user}
+
+Ứng dụng người sử dụng được định hướng xây dựng bằng Java Swing trên Windows,
+phục vụ quản lý tài khoản, kết nối bạn bè và trao đổi tin nhắn. Phân hệ của
+các chức năng trong bảng là User. Mã chức năng được giữ độc lập với mã
+công việc và thứ tự trình bày trong báo cáo.
+
+\begingroup
+\small
+\begin{longtable}{|C{1.2cm}|L{\dimexpr\textwidth-1.2cm-4\tabcolsep-3\arrayrulewidth\relax}|}
+  \caption{Danh mục chức năng của phân hệ người sử dụng}
+  \label{tab:chuc-nang-user}\\
+  \hline
+  \textbf{Mã} & \textbf{Chức năng và phạm vi}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Mã} & \textbf{Chức năng và phạm vi}\\
+  \hline
+  \endhead
+  \hypertarget{F01}{\texttt{F01}} & \textbf{Đăng ký tài khoản.}\\
+  \hline
+  \hypertarget{F02}{\texttt{F02}} & \textbf{Đăng nhập.}\\
+  \hline
+  \hypertarget{F03}{\texttt{F03}} &
+  \textbf{Cập nhật thông tin tài khoản:} giao diện chỉnh sửa hồ sơ cá nhân,
+  với các thông tin tương ứng trong hồ sơ người dùng ở
+  \hyperlink{F13}{F13}.\\
+  \hline
+  \hypertarget{F04}{\texttt{F04}} &
+  \textbf{Khởi tạo lại mật khẩu:} tạo mật khẩu ngẫu nhiên và gửi qua email.\\
+  \hline
+  \hypertarget{F05}{\texttt{F05}} & \textbf{Cập nhật mật khẩu.}\\
+  \hline
+  \hypertarget{F06}{\texttt{F06}} &
+  \textbf{Quản lý bạn bè:} hiển thị danh sách, lọc theo tên và xem trạng thái
+  online/offline; tìm người và yêu cầu kết bạn; hủy kết bạn; chặn đồng thời
+  hủy kết bạn để người bị chặn không gửi lại yêu cầu.\\
+  \hline
+  \hypertarget{F07}{\texttt{F07}} &
+  \textbf{Xử lý yêu cầu kết bạn:} hiển thị, lọc theo tên, đồng ý hoặc từ chối.\\
+  \hline
+  \hypertarget{F08}{\texttt{F08}} &
+  \textbf{Xem bạn bè đang online:} lọc theo tên, bắt đầu chat hoặc tạo nhóm.\\
+  \hline
+  \hypertarget{F09}{\texttt{F09}} &
+  \textbf{Tìm người:} tìm theo tên hoặc tên đăng nhập, không hiển thị người
+  đã chặn mình; từ kết quả có thể bắt đầu chat hoặc tạo nhóm.\\
+  \hline
+  \hypertarget{F10}{\texttt{F10}} &
+  \textbf{Báo cáo spam:} báo cáo tin nhắn không mong muốn nhận từ người khác.\\
+  \hline
+  \hypertarget{F11}{\texttt{F11}} &
+  \textbf{Chat riêng và lịch sử:} trao đổi thời gian thực khi online; lưu
+  tin nhắn để người offline xem sau; xem, xóa toàn bộ hoặc một số tin nhắn
+  trong lịch sử; tìm kiếm trong một hoặc tất cả cuộc trò chuyện và chuyển
+  đến kết quả; gọi LLM để chỉnh hoặc gợi ý tin nhắn.\\
+  \hline
+  \hypertarget{F12}{\texttt{F12}} &
+  \textbf{Nhóm chat:} tạo nhóm với ít nhất một tên đăng nhập khác, đổi tên,
+  thêm thành viên, gán quyền admin, chat và mã hóa nhóm; chỉ admin nhóm
+  được quyền xóa thành viên.\\
+  \hline
+\end{longtable}
+\endgroup
+
+Trong V1, danh mục này dùng để đối chiếu các màn hình của phân hệ người sử dụng
+với yêu cầu. Các thao tác gửi tin nhắn, gửi email, gọi LLM và mã hóa nhóm
+chưa cần được lập trình hoạt động ở giai đoạn này.

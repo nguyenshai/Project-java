@@ -1,0 +1,166 @@
+\section{Phân công công việc}
+
+\subsection{Kế hoạch phân công}
+\label{subsec:ke-hoach-phan-cong}
+
+Kế hoạch dưới đây cụ thể hóa phạm vi phụ trách của từng thành viên trong
+Version 1. Nội dung tập trung vào phân tích yêu cầu, thiết kế giao diện,
+thiết kế cơ sở dữ liệu và chuẩn bị hồ sơ nộp. Đây là phân công dự kiến,
+không phải xác nhận các công việc đã hoàn thành.
+
+Mã \texttt{F01}, \texttt{F02}, \ldots\ nhận biết chức năng; mã \texttt{T01},
+\texttt{T02}, \ldots\ nhận biết công việc. Phân hệ được thể hiện trong danh mục
+chức năng tại mục~\ref{subsubsec:client-user} và
+mục~\ref{subsubsec:client-admin}, không đưa vào mã.
+Mỗi mã được giữ ổn định khi đổi tên hoặc sắp xếp lại bảng.
+
+Một công việc có thể liên quan đến nhiều chức năng và một chức năng có thể
+được đối chiếu với nhiều công việc. Trong V1, liên kết này thể hiện phạm vi
+thiết kế và kiểm tra, không có nghĩa chức năng đã được triển khai.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|C{1cm}|L{\dimexpr\textwidth-6.6cm-8\tabcolsep-5\arrayrulewidth\relax}|L{3.2cm}|C{2.4cm}|}
+  \caption{Kế hoạch phân công công việc trong Version 1}
+  \label{tab:ke-hoach-phan-cong}\\
+  \hline
+  \textbf{Mã} & \textbf{Công việc} & \textbf{Người phụ trách} &
+  \textbf{Chức năng liên quan}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Mã} & \textbf{Công việc} & \textbf{Người phụ trách} &
+  \textbf{Chức năng liên quan}\\
+  \hline
+  \endhead
+  \hypertarget{T01}{\texttt{T01}} &
+    Phân tích đề bài, xác định phạm vi và các yêu cầu của Version 1.
+    & Cả hai thành viên & \hyperlink{F01}{F01}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T02}{\texttt{T02}} &
+    Thiết kế giao diện phân hệ quản trị viên, bao gồm các biểu mẫu,
+      danh sách, điều khiển lọc, sắp xếp, thống kê và biểu đồ theo đề bài.
+    & Nguyễn Sơn Hải & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T03}{\texttt{T03}} &
+    Thiết kế giao diện phân hệ người sử dụng, bao gồm tài khoản,
+      bạn bè, tìm người, chat riêng, chat nhóm và các thao tác liên quan.
+    & Châu Vũ Trung & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
+  \hline
+  \hypertarget{T04}{\texttt{T04}} &
+    Thiết kế cơ sở dữ liệu và chuẩn bị script tạo cơ sở dữ liệu PostgreSQL.
+    & Cả hai thành viên & \hyperlink{F01}{F01}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T05}{\texttt{T05}} &
+    Đối chiếu các màn hình và thiết kế cơ sở dữ liệu với yêu cầu đề bài,
+      ghi nhận các nội dung cần bổ sung hoặc điều chỉnh.
+    & Cả hai thành viên & \hyperlink{F01}{F01}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T06}{\texttt{T06}} &
+    Chuẩn bị nội dung báo cáo và ảnh minh họa của phân hệ quản trị viên.
+    & Nguyễn Sơn Hải & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T07}{\texttt{T07}} &
+    Chuẩn bị nội dung báo cáo và ảnh minh họa của phân hệ người sử dụng.
+    & Châu Vũ Trung & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
+  \hline
+  \hypertarget{T08}{\texttt{T08}} &
+    Tổng hợp báo cáo, thống nhất cách trình bày và sắp xếp hồ sơ nộp V1.
+    & Châu Vũ Trung & Công việc chung\\
+  \hline
+  \hypertarget{T09}{\texttt{T09}} &
+    Commit phần công việc thực hiện và cung cấp ảnh commit cá nhân
+      để đưa vào hồ sơ nộp.
+    & Mỗi thành viên & Công việc chung\\
+  \hline
+\end{longtable}
+\endgroup
+
+Khoảng mã như \hyperlink{F01}{F01}--\hyperlink{F12}{F12} bao gồm tất cả
+chức năng từ F01 đến F12; mỗi đầu mút liên kết đến dòng chức năng tương ứng.
+Các công việc chung về tổng hợp và quản lý sản phẩm không gắn ép với
+một chức năng cụ thể.
+
+\noindent\textbf{Nguyên tắc nghiệm thu:}
+Mọi công việc đều phải được cả hai thành viên kiểm tra và thống nhất
+công nhận trước khi ghi nhận hoàn thành.
+
+Phân công có thể được điều chỉnh theo khối lượng thực tế sau khi hai thành viên
+thống nhất. Kết quả thực hiện được cập nhật tại mục~\ref{subsec:ket-qua-thuc-hien}
+và là căn cứ để xác định đóng góp của từng thành viên.
+
+\clearpage
+\subsection{Kết quả thực hiện}
+\label{subsec:ket-qua-thuc-hien}
+
+Bảng dưới đây được dùng để ghi nhận công việc thực tế sau khi cả hai thành viên
+đã kiểm tra và công nhận kết quả. Mỗi dòng tương ứng với một công việc;
+chưa điền nội dung khi chưa có thông tin thực hiện được xác nhận.
+
+Cột mã công việc sử dụng lại mã \hyperlink{T01}{T01}--\hyperlink{T09}{T09}
+ở mục~\ref{subsec:ke-hoach-phan-cong}, không đánh số mới theo
+thứ tự ghi nhận. Một công việc có thể có nhiều dòng kết quả nếu được thực hiện
+qua nhiều đợt; các chức năng liên quan được đối chiếu từ mã công việc đó.
+
+Ngày hoàn thành được ghi theo định dạng \textit{dd/mm/yyyy}, tương ứng với thời điểm
+công việc được cả hai thành viên kiểm tra và công nhận. Minh chứng là đường dẫn
+đến sản phẩm hoặc mã commit phù hợp: mã nguồn và script SQL dẫn đến
+\href{https://github.com/nguyenshai/Project-java}{GitHub của nhóm};
+tài liệu, ảnh và báo cáo dẫn đến
+\href{https://drive.google.com/drive/folders/1Kci4Ug_HXLRbBBFc0h6lVz0RbuvbcJTF?usp=sharing}
+{Google Drive của nhóm}.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{Kết quả thực hiện công việc}
+\label{tab:ket-qua-thuc-hien}
+\begin{tabularx}{\textwidth}{|C{1.4cm}|L{2.2cm}|Y|L{2.1cm}|L{2.5cm}|L{2cm}|}
+  \hline
+  \textbf{Mã công việc} & \textbf{Người thực hiện} & \textbf{Công việc đã thực hiện} &
+  \textbf{Ngày hoàn thành} & \textbf{Kết quả / sản phẩm} & \textbf{Link minh chứng}\\
+  \hline
+  \rule{0pt}{1.15cm} & & & & & \\
+  \hline
+  \rule{0pt}{1.15cm} & & & & & \\
+  \hline
+  \rule{0pt}{1.15cm} & & & & & \\
+  \hline
+  \rule{0pt}{1.15cm} & & & & & \\
+  \hline
+\end{tabularx}
+\end{center}
+
+\clearpage
+\subsection{Bảng đóng góp của các thành viên}
+\label{subsec:dong-gop-thanh-vien}
+
+Tỷ lệ đóng góp được xác định dựa trên khối lượng công việc thực tế, mức độ
+hoàn thành, chất lượng sản phẩm và sự tham gia vào các công việc chung.
+Nội dung và tỷ lệ đóng góp được hai thành viên thống nhất trước khi nộp
+báo cáo, với tổng tỷ lệ bằng 100\%.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{Đóng góp của các thành viên}
+\label{tab:dong-gop-thanh-vien}
+\begin{tabularx}{\textwidth}{|C{0.7cm}|L{3cm}|C{2.1cm}|Y|C{2cm}|}
+  \hline
+  \textbf{STT} & \textbf{Họ và tên} & \textbf{MSSV} &
+  \textbf{Nội dung đóng góp thực tế} & \textbf{Tỷ lệ đóng góp}\\
+  \hline
+  \rule{0pt}{1.1cm}1 & Nguyễn Sơn Hải & 24127163 & & \\
+  \hline
+  \rule{0pt}{1.1cm}2 & Châu Vũ Trung & 24127256 & & \\
+  \hline
+  \multicolumn{4}{|r|}{\textbf{Tổng cộng}} & \textbf{100\%}\\
+  \hline
+\end{tabularx}
+\end{center}
+
+Nội dung đóng góp và tỷ lệ của từng thành viên sẽ được cập nhật sau khi hoàn thành
+các công việc trong V1. Minh chứng được đối chiếu với kết quả tại
+mục~\ref{subsec:ket-qua-thuc-hien}, lịch sử commit trên GitHub và tài liệu
+trên Google Drive; số lượng commit không phải tiêu chí đánh giá duy nhất.

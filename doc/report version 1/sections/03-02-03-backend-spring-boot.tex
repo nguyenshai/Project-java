@@ -1,0 +1,55 @@
+\subsubsection{Backend -- Spring Boot}
+\label{subsubsec:backend-spring-boot}
+
+Nhóm lựa chọn Spring Boot để xây dựng backend của hệ thống chat. Spring Boot
+hỗ trợ phát triển ứng dụng dựa trên Spring thông qua cơ chế tự động cấu hình
+và quản lý các thành phần của ứng dụng, giúp giảm phần cấu hình thủ công
+khi khởi tạo dự án.
+
+Trong đồ án, Spring Boot được định hướng sử dụng như sau:
+
+\begingroup
+\small
+\begin{longtable}{|L{4.6cm}|L{\dimexpr\textwidth-4.6cm-4\tabcolsep-3\arrayrulewidth\relax}|}
+  \caption{Định hướng áp dụng Spring Boot trong đồ án}
+  \label{tab:ap-dung-spring-boot}\\
+  \hline
+  \textbf{Đặc điểm} & \textbf{Cách áp dụng trong đồ án}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Đặc điểm} & \textbf{Cách áp dụng trong đồ án}\\
+  \hline
+  \endhead
+  Quản lý thành phần và Dependency Injection &
+  Quản lý các đối tượng xử lý nghiệp vụ, truy cập dữ liệu và các thành phần
+  phục vụ server; cung cấp chúng cho những nơi cần sử dụng\\
+  \hline
+  Tự động cấu hình &
+  Hỗ trợ cấu hình các thành phần dựa trên thư viện và thông tin được khai báo
+  trong dự án\\
+  \hline
+  Cấu hình bên ngoài &
+  Khai báo cổng TCP và thông tin kết nối PostgreSQL trong file cấu hình,
+  hạn chế ghi trực tiếp vào mã nguồn\\
+  \hline
+  Tổ chức mã nguồn &
+  Kết hợp với cách phân chia service (xử lý nghiệp vụ) và DAO
+  (Data Access Object, lớp truy cập dữ liệu) để tách xử lý nghiệp vụ
+  khỏi truy vấn dữ liệu\\
+  \hline
+  Đóng gói ứng dụng &
+  Hỗ trợ đóng gói backend thành ứng dụng Java có thể chạy độc lập\\
+  \hline
+\end{longtable}
+\endgroup
+
+Spring Boot không bắt buộc ứng dụng phải hoạt động như một web server.
+Với yêu cầu của đồ án, backend được định hướng chạy dưới dạng ứng dụng
+không có web server, kết hợp \texttt{ServerSocket} và \texttt{Socket} của Java
+để giao tiếp TCP với các client. Spring Boot quản lý các thành phần của backend,
+còn socket đảm nhiệm việc truyền nhận dữ liệu.
+
+Trong Version 1, nhóm xác định vai trò và cách áp dụng Spring Boot ở mức
+thiết kế. Cấu hình, mã nguồn backend và các cơ chế xử lý cụ thể sẽ được
+triển khai trong phiên bản tiếp theo.

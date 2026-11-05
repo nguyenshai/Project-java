@@ -1,0 +1,31 @@
+# Maven output
+**/target/
+
+# IDE settings
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+application-local.properties
+
+# Logs and temporary files
+*.log
+.build-tools/
+
+# draw.io automatic backups
+*.drawio.bkp
+
+# LaTeX generated files (keep source, diagrams and final PDF)
+*.aux
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz

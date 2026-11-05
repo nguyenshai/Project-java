@@ -1,0 +1,83 @@
+\section{Thiết kế hệ thống}
+
+\subsection{Tổng quan hệ thống}
+\label{subsec:tong-quan-he-thong}
+
+Hệ thống chat được thiết kế theo mô hình client--server, gồm hai ứng dụng desktop
+trên Windows dành cho quản trị viên và người sử dụng, một backend dùng Spring Boot
+và cơ sở dữ liệu PostgreSQL. Hai ứng dụng client dự kiến được xây dựng bằng Java Swing
+và giao tiếp với backend thông qua socket TCP, không sử dụng WebSocket.
+
+Ứng dụng quản trị viên cung cấp giao diện quản lý và theo dõi hệ thống;
+ứng dụng người sử dụng cung cấp giao diện quản lý tài khoản, bạn bè và trao đổi
+tin nhắn. Theo thiết kế, backend sẽ tiếp nhận yêu cầu từ các client, xử lý nghiệp vụ,
+kiểm tra quyền truy cập và trả kết quả. Dữ liệu dự kiến được lưu trữ trong PostgreSQL và được backend
+truy cập thông qua JDBC. Các client không kết nối trực tiếp với cơ sở dữ liệu.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{images/System Overview.drawio.png}
+  \caption{Kiến trúc tổng quan hệ thống chat.}
+  \label{fig:kien-truc-tong-quan}
+\end{figure}
+
+\begingroup
+\small
+\begin{longtable}{|L{3.1cm}|L{3.9cm}|L{\dimexpr\textwidth-7cm-6\tabcolsep-4\arrayrulewidth\relax}|}
+  \caption{Công nghệ sử dụng trong hệ thống}
+  \label{tab:cong-nghe-su-dung}\\
+  \hline
+  \textbf{Thành phần} & \textbf{Công nghệ} & \textbf{Mục đích sử dụng}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Thành phần} & \textbf{Công nghệ} & \textbf{Mục đích sử dụng}\\
+  \hline
+  \endhead
+  Ngôn ngữ lập trình & Java 21 & Xây dựng ứng dụng client và backend\\
+  \hline
+  Giao diện Windows & Java Swing & Xây dựng giao diện cho quản trị viên và người sử dụng\\
+  \hline
+  Framework backend & Spring Boot & Tổ chức backend và xử lý nghiệp vụ\\
+  \hline
+  Giao tiếp client--server & Socket TCP &
+  Trao đổi yêu cầu, phản hồi và tin nhắn giữa client và server\\
+  \hline
+  Cơ sở dữ liệu & PostgreSQL & Lưu trữ dữ liệu hệ thống\\
+  \hline
+  Truy cập dữ liệu & JDBC và PostgreSQL JDBC Driver &
+  Kết nối backend với cơ sở dữ liệu và thực hiện truy vấn\\
+  \hline
+  Quản lý dự án & Maven & Quản lý thư viện, biên dịch và đóng gói ứng dụng\\
+  \hline
+  Kiểm thử & JUnit & Kiểm thử các thành phần của ứng dụng\\
+  \hline
+  Quản lý mã nguồn & Git và GitHub & Theo dõi thay đổi và phối hợp phát triển\\
+  \hline
+\end{longtable}
+\endgroup
+
+Trong Version 1, nhóm tập trung thiết kế giao diện của hai phân hệ và cơ sở dữ liệu.
+Kiến trúc trên là định hướng cho giai đoạn triển khai chức năng; backend và cơ chế
+giao tiếp socket chưa được yêu cầu hoàn thiện trong phiên bản này.
+
+\clearpage
+\subsection{Thiết kế các thành phần hệ thống}
+\label{subsec:thiet-ke-cac-thanh-phan}
+
+Phần này xác định phạm vi của hai ứng dụng client, vai trò của backend
+và các nhóm dữ liệu dự kiến. Danh mục chức năng là căn cứ đối chiếu giao diện
+và thiết kế CSDL trong V1; không phải danh sách chức năng đã hoàn thành.
+Các màn hình, cấu trúc bảng và quan hệ dữ liệu sẽ được mô tả trong phần
+thiết kế chi tiết tương ứng.
+
+\input{sections/03-02-02-ung-dung-nguoi-dung}
+
+\clearpage
+\input{sections/03-02-01-ung-dung-quan-tri}
+
+\clearpage
+\input{sections/03-02-03-backend-spring-boot}
+
+\clearpage
+\input{sections/03-02-04-co-so-du-lieu-postgresql}
