@@ -41,12 +41,12 @@ thiết kế và kiểm tra, không có nghĩa chức năng đã được triể
   \hypertarget{T02}{\texttt{T02}} &
     Thiết kế giao diện phân hệ quản trị viên, bao gồm các biểu mẫu,
       danh sách, điều khiển lọc, sắp xếp, thống kê và biểu đồ theo đề bài.
-    & Nguyễn Sơn Hải & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
+    & Châu Vũ Trung & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
   \hline
   \hypertarget{T03}{\texttt{T03}} &
     Thiết kế giao diện phân hệ người sử dụng, bao gồm tài khoản,
       bạn bè, tìm người, chat riêng, chat nhóm và các thao tác liên quan.
-    & Châu Vũ Trung & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
+    & Nguyễn Sơn Hải & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
   \hline
   \hypertarget{T04}{\texttt{T04}} &
     Thiết kế cơ sở dữ liệu và chuẩn bị script tạo cơ sở dữ liệu PostgreSQL.
@@ -59,11 +59,11 @@ thiết kế và kiểm tra, không có nghĩa chức năng đã được triể
   \hline
   \hypertarget{T06}{\texttt{T06}} &
     Chuẩn bị nội dung báo cáo và ảnh minh họa của phân hệ quản trị viên.
-    & Nguyễn Sơn Hải & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
+    & Châu Vũ Trung & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
   \hline
   \hypertarget{T07}{\texttt{T07}} &
     Chuẩn bị nội dung báo cáo và ảnh minh họa của phân hệ người sử dụng.
-    & Châu Vũ Trung & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
+    & Nguyễn Sơn Hải & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
   \hline
   \hypertarget{T08}{\texttt{T08}} &
     Tổng hợp báo cáo, thống nhất cách trình bày và sắp xếp hồ sơ nộp V1.
@@ -94,9 +94,9 @@ và là căn cứ để xác định đóng góp của từng thành viên.
 \subsection{Kết quả thực hiện}
 \label{subsec:ket-qua-thuc-hien}
 
-Bảng dưới đây được dùng để ghi nhận công việc thực tế sau khi cả hai thành viên
-đã kiểm tra và công nhận kết quả. Mỗi dòng tương ứng với một công việc;
-chưa điền nội dung khi chưa có thông tin thực hiện được xác nhận.
+Bảng dưới đây ghi nhận công việc thực tế có sản phẩm và minh chứng đối chiếu.
+Ngày kiểm tra kỹ thuật và ngày ghi nhận từ commit được chú thích trong bảng.
+Ngày hoàn thành theo nghiệm thu chung do hai thành viên xác nhận.
 
 Cột mã công việc sử dụng lại mã \hyperlink{T01}{T01}--\hyperlink{T09}{T09}
 ở mục~\ref{subsec:ke-hoach-phan-cong}, không đánh số mới theo
@@ -104,7 +104,8 @@ thứ tự ghi nhận. Một công việc có thể có nhiều dòng kết qu�
 qua nhiều đợt; các chức năng liên quan được đối chiếu từ mã công việc đó.
 
 Ngày hoàn thành được ghi theo định dạng \textit{dd/mm/yyyy}, tương ứng với thời điểm
-công việc được cả hai thành viên kiểm tra và công nhận. Minh chứng là đường dẫn
+công việc được cả hai thành viên kiểm tra và công nhận. Nếu chưa có ngày xác nhận,
+ngày ghi nhận từ commit được chú thích trong bảng. Minh chứng là đường dẫn
 đến sản phẩm hoặc mã commit phù hợp: mã nguồn và script SQL dẫn đến
 \href{https://github.com/nguyenshai/Project-java}{GitHub của nhóm};
 tài liệu, ảnh và báo cáo dẫn đến
@@ -121,9 +122,26 @@ tài liệu, ảnh và báo cáo dẫn đến
   \textbf{Mã công việc} & \textbf{Người thực hiện} & \textbf{Công việc đã thực hiện} &
   \textbf{Ngày hoàn thành} & \textbf{Kết quả / sản phẩm} & \textbf{Link minh chứng}\\
   \hline
-  \rule{0pt}{1.15cm} & & & & & \\
+  \hyperlink{T08}{\texttt{T08}} & Châu Vũ Trung &
+    Thiết lập cấu trúc và bản nháp báo cáo V1 bằng LaTeX. &
+    05/11/2026 (commit) & Mã nguồn báo cáo V1 &
+    \href{https://github.com/nguyenshai/Project-java/commit/97c5565ffd339990c2cdc7d8f282d2d1a080a7d6}{\texttt{97c5565}} \\
   \hline
-  \rule{0pt}{1.15cm} & & & & & \\
+  \hyperlink{T08}{\texttt{T08}} & Châu Vũ Trung &
+    Thiết lập Maven Wrapper và cấu trúc dự án Java gồm bốn module. &
+    05/11/2026 (commit) & Khung dự án Maven &
+    \href{https://github.com/nguyenshai/Project-java/commit/97c5565ffd339990c2cdc7d8f282d2d1a080a7d6}{\texttt{97c5565}} \\
+  \hline
+  \hyperlink{T02}{\texttt{T02}} & Châu Vũ Trung &
+    Thiết kế Figma và dựng giao diện quản trị bằng Java Swing cho F13--F21. &
+    11/11/2026 (kiểm tra) & Nguyên mẫu và mã nguồn Admin &
+    \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU/ChatApp-Admin?node-id=2-80}{Figma};
+    \href{https://github.com/nguyenshai/Project-java/tree/trung/src/admin-client}{mã nguồn} \\
+  \hline
+  \hyperlink{T06}{\texttt{T06}} & Châu Vũ Trung &
+    Viết mục Admin, đối chiếu F13--F21 và kết xuất ảnh từ ứng dụng Swing. &
+    11/11/2026 (kiểm tra) & Nội dung và ảnh giao diện Admin &
+    Mục~\ref{subsubsec:client-admin}, Hình~\ref{fig:admin-swing-users-history} \\
   \hline
   \rule{0pt}{1.15cm} & & & & & \\
   \hline
@@ -153,7 +171,9 @@ báo cáo, với tổng tỷ lệ bằng 100\%.
   \hline
   \rule{0pt}{1.1cm}1 & Nguyễn Sơn Hải & 24127163 & & \\
   \hline
-  \rule{0pt}{1.1cm}2 & Châu Vũ Trung & 24127256 & & \\
+  \rule{0pt}{1.1cm}2 & Châu Vũ Trung & 24127256 &
+  Thiết lập khung Maven và bản nháp báo cáo; thiết kế, dựng và kiểm tra giao diện Admin F13--F21;
+  viết mục Admin và chuẩn bị ảnh giao diện. & \\
   \hline
   \multicolumn{4}{|r|}{\textbf{Tổng cộng}} & \textbf{100\%}\\
   \hline

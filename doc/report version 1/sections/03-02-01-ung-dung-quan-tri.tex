@@ -68,3 +68,152 @@ là Admin hệ thống; không đồng nhất với vai trò admin nhóm chat.
 
 Trong V1, danh mục này dùng để đối chiếu các màn hình của phân hệ quản trị viên
 với yêu cầu, bao gồm các điều khiển thao tác, lọc và sắp xếp tương ứng.
+
+\paragraph{Điều hướng và danh sách màn hình}
+\label{par:admin-navigation}
+\mbox{}\par
+Thanh điều hướng bên trái chia thành \textbf{Manage Accounts},
+\textbf{Monitor \& Moderate} và \textbf{Analyze Usage}. Màn hình
+\textbf{Users} mở sau khi đăng nhập. Bảng~\ref{tab:admin-screen-map}
+đối chiếu các màn hình trong nguyên mẫu Figma với mã chức năng của đề bài.
+Nhãn tiếng Anh trong bảng được giữ theo giao diện.
+
+\begingroup
+\small
+\begin{longtable}{|L{4.3cm}|L{\dimexpr\textwidth-4.3cm-4\tabcolsep-3\arrayrulewidth\relax}|}
+  \caption{Danh sách màn hình quản trị viên trong nguyên mẫu}
+  \label{tab:admin-screen-map}\\
+  \hline
+  \textbf{Màn hình} & \textbf{Chức năng và nội dung hiển thị}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Màn hình} & \textbf{Chức năng và nội dung hiển thị}\\
+  \hline
+  \endhead
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=2-80}{Users}
+  & \hyperlink{F13}{F13}. Danh sách và hồ sơ tài khoản, biểu mẫu thêm/sửa,
+  đổi mật khẩu, khóa/mở khóa và xác nhận xóa. Hồ sơ có các thẻ
+  \textbf{Login History} và \textbf{Friends \& Groups}. Địa chỉ và ngày sinh
+  có thể bỏ trống. Trạng thái tài khoản gồm \textbf{Active} và \textbf{Locked};
+  tài khoản bị khóa cho đến khi quản trị viên mở khóa.\\
+  \hline
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=16-822}{Account History}
+  & \hyperlink{F14}{F14}, \hyperlink{F17}{F17}. \textbf{Sign-ins} hiển thị
+  thời điểm, tên đăng nhập và họ tên trên toàn hệ thống. \textbf{New Accounts}
+  hiển thị các tài khoản tạo trong khoảng đã chọn, có tìm kiếm và sắp xếp.\\
+  \hline
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=25-1020}{Chat Groups}
+  & \hyperlink{F15}{F15}. Danh sách nhóm có tìm kiếm và sắp xếp. Chi tiết nhóm
+  hiển thị người tạo, thời điểm tạo, các thành viên và quản trị viên nhóm.
+  \textbf{Activity} và \textbf{Monitoring} minh họa phần mở rộng theo dõi nhóm.\\
+  \hline
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=38-1461}{Spam Reports}
+  & \hyperlink{F16}{F16}. \textbf{Reports} liệt kê các báo cáo riêng lẻ.
+  \textbf{By account} tổng hợp theo tài khoản, có lọc trạng thái và xem
+  lịch sử báo cáo. Chi tiết báo cáo hiển thị người gửi báo cáo, người bị
+  báo cáo, lý do và tin nhắn liên quan trước khi xác nhận khóa tài khoản.\\
+  \hline
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=53-934}{Analytics / Overview}
+  & \hyperlink{F18}{F18}, \hyperlink{F21}{F21}. Dùng \textbf{Graph} để chọn
+  biểu đồ tháng theo năm. \textbf{Registrations} đếm tài khoản được tạo;
+  \textbf{Active users} đếm tài khoản khác nhau có mở ứng dụng. Các biểu đồ
+  \textbf{Sign-ins} và \textbf{Messages sent} bổ sung góc nhìn sử dụng.\\
+  \hline
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=53-1087}{Analytics / Friend Counts}
+  & \hyperlink{F19}{F19}. Bảng hiển thị số bạn trực tiếp và tổng số người
+  trong mạng bạn bè. Chi tiết một tài khoản có ba danh sách thu gọn được:
+  bạn bè, nhóm chat, và bạn của bạn kèm người bạn chung.\\
+  \hline
+  \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=53-1279}{Analytics / Activity}
+  & \hyperlink{F20}{F20}. Bảng theo khoảng thời gian hiển thị riêng lượt
+  đăng nhập, lượt mở ứng dụng, số người và số nhóm đã chat. Mặc định
+  \textbf{Any count} hiển thị cả tài khoản có mở ứng dụng mà không đăng nhập lại
+  trong khoảng đã chọn. Biểu đồ \textbf{Monthly sign-ins} đếm số lượt đăng nhập
+  theo tháng. Biểu đồ \textbf{Active users} ở \textbf{Overview} đếm số tài khoản
+  khác nhau có mở ứng dụng.\\
+  \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Bộ chọn thời gian}
+\mbox{}\par
+Các màn hình dùng chung nút \textbf{Period}, hiển thị khoảng đang áp dụng.
+Chế độ \textbf{Month} chọn tháng và năm; \textbf{Year} chọn cả năm;
+\textbf{Custom dates} chọn ngày bắt đầu và ngày kết thúc. Lịch sử báo cáo
+của một tài khoản dùng cùng nút với hai trường ngày. Biểu đồ theo năm dùng
+nút \textbf{Period} ở chế độ chọn năm và vẫn hiển thị các tháng trên trục ngang.
+Khoảng của bảng và năm của biểu đồ là hai lựa chọn độc lập khi cùng xuất hiện
+trên một màn hình. Bản Java Swing tính lại bảng và biểu đồ từ dữ liệu mẫu
+khi quản trị viên thay đổi khoảng thời gian.
+
+\paragraph{Ảnh nguyên mẫu tham chiếu}
+\mbox{}\par
+Các hình dưới đây minh họa bố cục Figma và dùng dữ liệu mẫu.
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.92\linewidth]{images/admin-users.png}
+  \captionof{figure}{Danh sách tài khoản trong màn hình Users.}
+  \label{fig:admin-prototype-users}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.92\linewidth]{images/admin-period-picker.png}
+  \captionof{figure}{Nút Period và chế độ chọn tháng trong Account History.}
+  \label{fig:admin-prototype-period}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.92\linewidth]{images/admin-analytics-overview.png}
+  \captionof{figure}{Biểu đồ đăng ký theo tháng trong Analytics / Overview.}
+  \label{fig:admin-prototype-analytics}
+\end{minipage}
+
+\paragraph{Ảnh giao diện Java Swing V1}
+\mbox{}\par
+Các ảnh dưới đây được kết xuất từ ứng dụng Java Swing trong mô-đun
+\texttt{admin-client}. Bản V1 mở trực tiếp màn hình \textbf{Users} và sử dụng
+dữ liệu mẫu trong bộ nhớ. Các thao tác trên tài khoản chỉ áp dụng trong phiên
+chạy thử. Báo cáo giữ các ảnh Figma ở trên làm tài liệu đối chiếu bố cục.
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.48\linewidth]{images/admin-swing-users.png}\hfill
+  \includegraphics[width=.48\linewidth]{images/admin-swing-account-history.png}
+  \captionof{figure}{F13 và F14. Danh sách tài khoản và lịch sử đăng nhập toàn hệ thống.}
+  \label{fig:admin-swing-users-history}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.48\linewidth]{images/admin-swing-groups.png}\hfill
+  \includegraphics[width=.48\linewidth]{images/admin-swing-spam-reports.png}
+  \captionof{figure}{F15 và F16. Danh sách nhóm chat và báo cáo spam.}
+  \label{fig:admin-swing-moderation}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.48\linewidth]{images/admin-swing-new-accounts.png}\hfill
+  \includegraphics[width=.48\linewidth]{images/admin-swing-overview.png}
+  \captionof{figure}{F17 và F18. Tài khoản mới trong khoảng đã chọn và biểu đồ đăng ký theo tháng.}
+  \label{fig:admin-swing-registrations}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.48\linewidth]{images/admin-swing-friend-counts.png}\hfill
+  \includegraphics[width=.48\linewidth]{images/admin-swing-activity.png}
+  \captionof{figure}{F19 và F20. Thống kê bạn bè và hoạt động theo tài khoản.}
+  \label{fig:admin-swing-friends-activity}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.74\linewidth]{images/admin-swing-active-users.png}
+  \captionof{figure}{F21. Số tài khoản khác nhau có mở ứng dụng theo từng tháng.}
+  \label{fig:admin-swing-active-users}
+\end{minipage}

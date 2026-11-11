@@ -101,9 +101,10 @@ các dữ liệu gốc. Các chức năng của Admin được đối chiếu nh
     \texttt{UserAccount.createdAt} theo khoảng thời gian; tổng hợp số tài khoản
     tạo mới theo tháng của năm được chọn.
   \item \hyperlink{F19}{F19}: đếm quan hệ trong \texttt{Friendship};
-    khi tính cả bạn của bạn, dự kiến loại chính người đang xét và loại trùng
-    các tài khoản xuất hiện qua nhiều quan hệ. Cách tính tổng này cần được
-    thống nhất khi chốt tiêu chí thống kê.
+    \textbf{Total network} là hợp của tập bạn trực tiếp và tập bạn của bạn,
+    loại chính tài khoản đang xét và chỉ đếm mỗi tài khoản một lần.
+    \textbf{Friends of friends only} loại thêm các bạn trực tiếp; người bạn
+    chung được xác định từ hai quan hệ bạn bè nối tiếp nhau.
   \item \hyperlink{F20}{F20}: đếm lượt mở ứng dụng từ
     \texttt{AppOpenEvent}; đối chiếu tin nhắn, hội thoại và thành viên để
     xác định số người và số nhóm có trao đổi trong khoảng thời gian chọn.
@@ -115,3 +116,18 @@ Lịch sử đăng nhập và lượt mở ứng dụng được tách riêng v�
 không nhất thiết là một lần đăng nhập mới. Trạng thái online/offline sẽ cần
 được backend xác định từ kết nối thực tế khi triển khai; một bản ghi đăng nhập
 cũ không đủ chứng minh người dùng đang online.
+
+Bộ chọn \textbf{Period} xác định khoảng lọc của bản ghi theo tháng, năm hoặc
+hai ngày do quản trị viên nhập. Với khoảng ngày nhập tay, dữ liệu gồm cả ngày
+bắt đầu và ngày kết thúc theo múi giờ thống nhất của hệ thống. Biểu đồ năm
+nhóm dữ liệu theo tháng; tổng \textbf{Active users} của cả năm đếm mỗi tài khoản
+một lần, kể cả khi tài khoản có hoạt động trong nhiều tháng.
+
+\paragraph{Dữ liệu cho phần mở rộng quản trị}
+\mbox{}\par
+ERD hiện tại hỗ trợ trạng thái \texttt{ACTIVE}/\texttt{LOCKED} và các báo cáo
+spam. Nhật ký khóa/mở khóa trong nguyên mẫu là phần mở rộng cần lưu thời điểm,
+tài khoản bị tác động và quản trị viên thực hiện. Nhật ký hoạt động nhóm có thể
+lấy mốc gửi tin nhắn và tham gia/rời nhóm từ các bảng hiện có. Để phân biệt
+tự rời với bị xóa khỏi nhóm hoặc ghi nhận việc đổi tên và đổi quyền, cần bổ
+sung bản ghi sự kiện trước khi triển khai các mục tương ứng.
