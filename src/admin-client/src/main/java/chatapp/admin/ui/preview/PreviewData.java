@@ -192,6 +192,6 @@ public final class PreviewData {
         return new Activity(sign, open, contacts.size(), groupChats.size());
     }
 
-    public static LocalDate date(String s) { return LocalDate.parse("2026-" + s); }
+    private static LocalDate date(String s) { return LocalDate.parse("2026-" + s); }
     private static LocalDateTime at(String s) { return LocalDateTime.parse("2026-" + s); }
 }

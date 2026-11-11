@@ -4,6 +4,7 @@ import chatapp.admin.ui.accounts.Accounts;
 import chatapp.admin.ui.analytics.Analytics;
 import chatapp.admin.ui.moderation.Moderation;
 import chatapp.admin.ui.preview.PreviewData;
+import chatapp.admin.ui.shared.PeriodPicker;
 import chatapp.admin.ui.shared.Ui;
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public final class AdminFrame extends JFrame {
 
     private static final class Workspace extends JPanel {
         private final PreviewData data = new PreviewData();
+        private final PeriodPicker period = new PeriodPicker(PreviewData.NOW.getYear());
         private final JPanel content = new JPanel(new CardLayout());
         private final Map<String, JButton> buttons = new LinkedHashMap<>();
         private Component current;
@@ -131,9 +133,9 @@ public final class AdminFrame extends JFrame {
             }
             if (current != null) content.remove(current);
             current = switch (name) {
-                case "Users" -> new Accounts(data);
-                case "Analytics" -> new Analytics(data);
-                default -> new Moderation(data, name);
+                case "Users" -> new Accounts(data, period);
+                case "Analytics" -> new Analytics(data, period);
+                default -> new Moderation(data, period, name);
             };
             content.add(current, name);
             ((CardLayout) content.getLayout()).show(content, name);

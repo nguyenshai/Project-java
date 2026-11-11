@@ -98,7 +98,7 @@ các dữ liệu gốc. Các chức năng của Admin được đối chiếu nh
   \item \hyperlink{F14}{F14}: lấy các lượt đăng nhập từ
     \texttt{LoginHistory}, kết hợp hồ sơ tài khoản và sắp xếp theo thời gian.
   \item \hyperlink{F17}{F17}--\hyperlink{F18}{F18}: lọc
-    \texttt{UserAccount.createdAt} theo khoảng thời gian; tổng hợp số tài khoản
+    \texttt{UserAccount.createdAt} theo năm đã chọn; tổng hợp số tài khoản
     tạo mới theo tháng của năm được chọn.
   \item \hyperlink{F19}{F19}: đếm quan hệ trong \texttt{Friendship};
     \textbf{Total network} là hợp của tập bạn trực tiếp và tập bạn của bạn,
@@ -107,7 +107,7 @@ các dữ liệu gốc. Các chức năng của Admin được đối chiếu nh
     chung được xác định từ hai quan hệ bạn bè nối tiếp nhau.
   \item \hyperlink{F20}{F20}: đếm lượt mở ứng dụng từ
     \texttt{AppOpenEvent}; đối chiếu tin nhắn, hội thoại và thành viên để
-    xác định số người và số nhóm có trao đổi trong khoảng thời gian chọn.
+    xác định số người và số nhóm có trao đổi trong năm đã chọn.
   \item \hyperlink{F21}{F21}: đếm các tài khoản khác nhau có mở ứng dụng
     trong từng tháng, không dùng tổng số lượt mở thay cho số người hoạt động.
 \end{itemize}
@@ -117,11 +117,11 @@ không nhất thiết là một lần đăng nhập mới. Trạng thái online/
 được backend xác định từ kết nối thực tế khi triển khai; một bản ghi đăng nhập
 cũ không đủ chứng minh người dùng đang online.
 
-Bộ chọn \textbf{Period} xác định khoảng lọc của bản ghi theo tháng, năm hoặc
-hai ngày do quản trị viên nhập. Với khoảng ngày nhập tay, dữ liệu gồm cả ngày
-bắt đầu và ngày kết thúc theo múi giờ thống nhất của hệ thống. Biểu đồ năm
-nhóm dữ liệu theo tháng; tổng \textbf{Active users} của cả năm đếm mỗi tài khoản
-một lần, kể cả khi tài khoản có hoạt động trong nhiều tháng.
+Bộ chọn \textbf{Period} áp dụng cùng một năm dương lịch cho các bảng và biểu đồ.
+Truy vấn theo năm bao gồm các mốc từ đầu năm đến trước đầu năm kế tiếp theo
+múi giờ thống nhất của hệ thống. Biểu đồ luôn có 12 tháng; tổng
+\textbf{Active users} của cả năm đếm mỗi tài khoản một lần, kể cả khi tài khoản
+có hoạt động trong nhiều tháng.
 
 \paragraph{Dữ liệu cho phần mở rộng quản trị}
 \mbox{}\par

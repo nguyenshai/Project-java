@@ -6,7 +6,6 @@ import chatapp.admin.ui.shared.*;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
@@ -19,10 +18,11 @@ public final class Accounts extends Screen {
     private final PreviewData data;
     private String query = "";
     private String statusFilter = "All statuses";
-    private PeriodPicker.Range period = PeriodPicker.SAMPLE;
+    private final PeriodPicker period;
 
-    public Accounts(PreviewData data) {
+    public Accounts(PreviewData data, PeriodPicker period) {
         this.data = data;
+        this.period = period;
         directory();
     }
 
@@ -140,8 +140,9 @@ public final class Accounts extends Screen {
     }
 
     private void history(JPanel page, User u) {
-        Ui.add(page, PeriodPicker.range(period, value -> { period = value; detail(u.id(), "Login History"); }));
-        var events = data.signIns.stream().filter(s -> s.userId().equals(u.id()) && period.includes(s.at().toLocalDate()))
+        Ui.add(page, period.button(() -> detail(u.id(), "Login History")));
+        var range = period.range();
+        var events = data.signIns.stream().filter(s -> s.userId().equals(u.id()) && range.includes(s.at().toLocalDate()))
             .sorted(Comparator.comparing(PreviewData.SignIn::at).reversed()).toList();
         JPanel split = new JPanel(new GridLayout(1, 2, 18, 0));
         split.setOpaque(false);
@@ -156,13 +157,13 @@ public final class Accounts extends Screen {
         JPanel stats = Ui.row();
         stats.add(info("Total sign-ins", String.valueOf(events.size())));
         stats.add(info("Days with sign-ins", String.valueOf(events.stream().map(e -> e.at().toLocalDate()).distinct().count())));
-        String last = data.signIns.stream().filter(e -> e.userId().equals(u.id())).map(PreviewData.SignIn::at)
+        String last = events.stream().map(PreviewData.SignIn::at)
             .max(Comparator.naturalOrder()).map(TIME::format).orElse("—");
         stats.add(info("Last sign-in", last));
         JPanel chart = Ui.column();
         Ui.add(chart, stats);
-        Ui.add(chart, Ui.label("Daily sign-ins", 14, true));
-        Ui.add(chart, BarChart.forDates(period, events.stream().map(e -> e.at().toLocalDate()).toList()));
+        Ui.add(chart, Ui.label("Monthly sign-ins", 14, true));
+        Ui.add(chart, BarChart.forDates(period.year(), events.stream().map(e -> e.at().toLocalDate()).toList()));
         activity.add(chart);
         split.add(activity);
         Ui.add(page, split);

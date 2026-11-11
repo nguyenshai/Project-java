@@ -1,7 +1,7 @@
 \subsubsection{Ứng dụng quản trị viên -- Java Swing}
 \label{subsubsec:client-admin}
 
-Ứng dụng quản trị viên được định hướng xây dựng bằng Java Swing trên Windows,
+Bản giao diện quản trị viên V1 được xây dựng bằng Java Swing trên Windows,
 phục vụ quản lý và theo dõi hệ thống. Danh mục dưới đây xác định mã chức năng
 để đối chiếu với các công việc ở mục~\ref{subsec:ke-hoach-phan-cong}.
 Phân hệ của các chức năng trong bảng
@@ -36,11 +36,11 @@ là Admin hệ thống; không đồng nhất với vai trò admin nhóm chat.
   xem danh sách thành viên và admin của từng nhóm.\\
   \hline
   \hypertarget{F16}{\texttt{F16}} &
-  \textbf{Xem và xử lý báo cáo spam:} lọc theo thời gian, tên đăng nhập;
+  \textbf{Xem và xử lý báo cáo spam:} lọc theo năm và tên đăng nhập;
   sắp xếp theo thời gian hoặc tên đăng nhập; khóa tài khoản bị báo cáo.\\
   \hline
   \hypertarget{F17}{\texttt{F17}} &
-  \textbf{Xem người dùng đăng ký mới:} chọn khoảng thời gian, lọc theo tên,
+  \textbf{Xem người dùng đăng ký mới:} chọn năm, lọc theo tên,
   sắp xếp theo tên hoặc thời gian tạo.\\
   \hline
   \hypertarget{F18}{\texttt{F18}} &
@@ -53,7 +53,7 @@ là Admin hệ thống; không đồng nhất với vai trò admin nhóm chat.
   hoặc lớn hơn giá trị nhập; sắp xếp theo tên hoặc thời gian tạo.\\
   \hline
   \hypertarget{F20}{\texttt{F20}} &
-  \textbf{Xem người dùng hoạt động:} chọn khoảng thời gian; xem số lần mở
+  \textbf{Xem người dùng hoạt động:} chọn năm; xem số lần mở
   ứng dụng, số người và số nhóm đã chat; lọc theo tên và số lượng hoạt động
   với điều kiện bằng, nhỏ hơn hoặc lớn hơn giá trị nhập;
   sắp xếp theo tên hoặc thời gian tạo.\\
@@ -74,14 +74,14 @@ với yêu cầu, bao gồm các điều khiển thao tác, lọc và sắp xế
 \mbox{}\par
 Thanh điều hướng bên trái chia thành \textbf{Manage Accounts},
 \textbf{Monitor \& Moderate} và \textbf{Analyze Usage}. Màn hình
-\textbf{Users} mở sau khi đăng nhập. Bảng~\ref{tab:admin-screen-map}
-đối chiếu các màn hình trong nguyên mẫu Figma với mã chức năng của đề bài.
+\textbf{Users} mở khi chạy bản xem thử V1. Bảng~\ref{tab:admin-screen-map}
+đối chiếu giao diện Swing với nguyên mẫu Figma và mã chức năng của đề bài.
 Nhãn tiếng Anh trong bảng được giữ theo giao diện.
 
 \begingroup
 \small
 \begin{longtable}{|L{4.3cm}|L{\dimexpr\textwidth-4.3cm-4\tabcolsep-3\arrayrulewidth\relax}|}
-  \caption{Danh sách màn hình quản trị viên trong nguyên mẫu}
+  \caption{Danh sách màn hình quản trị viên V1}
   \label{tab:admin-screen-map}\\
   \hline
   \textbf{Màn hình} & \textbf{Chức năng và nội dung hiển thị}\\
@@ -101,17 +101,18 @@ Nhãn tiếng Anh trong bảng được giữ theo giao diện.
   \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=16-822}{Account History}
   & \hyperlink{F14}{F14}, \hyperlink{F17}{F17}. \textbf{Sign-ins} hiển thị
   thời điểm, tên đăng nhập và họ tên trên toàn hệ thống. \textbf{New Accounts}
-  hiển thị các tài khoản tạo trong khoảng đã chọn, có tìm kiếm và sắp xếp.\\
+  hiển thị các tài khoản tạo trong năm đã chọn, có tìm kiếm, sắp xếp và biểu đồ đăng ký theo tháng.\\
   \hline
   \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=25-1020}{Chat Groups}
   & \hyperlink{F15}{F15}. Danh sách nhóm có tìm kiếm và sắp xếp. Chi tiết nhóm
   hiển thị người tạo, thời điểm tạo, các thành viên và quản trị viên nhóm.
-  \textbf{Activity} và \textbf{Monitoring} minh họa phần mở rộng theo dõi nhóm.\\
+  \textbf{Activity} và \textbf{Monitoring} minh họa phần mở rộng theo dõi nhóm. Biểu đồ theo tháng đếm hoạt động, tin nhắn hoặc lượt tham gia nhóm.\\
   \hline
   \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=38-1461}{Spam Reports}
   & \hyperlink{F16}{F16}. \textbf{Reports} liệt kê các báo cáo riêng lẻ.
   \textbf{By account} tổng hợp theo tài khoản, có lọc trạng thái và xem
-  lịch sử báo cáo. Chi tiết báo cáo hiển thị người gửi báo cáo, người bị
+  lịch sử báo cáo. Số lượt khóa và nhật ký khóa/mở khóa dùng cùng năm đã chọn.
+  Chi tiết báo cáo hiển thị người gửi báo cáo, người bị
   báo cáo, lý do và tin nhắn liên quan trước khi xác nhận khóa tài khoản.\\
   \hline
   \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=53-934}{Analytics / Overview}
@@ -126,11 +127,11 @@ Nhãn tiếng Anh trong bảng được giữ theo giao diện.
   bạn bè, nhóm chat, và bạn của bạn kèm người bạn chung.\\
   \hline
   \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=53-1279}{Analytics / Activity}
-  & \hyperlink{F20}{F20}. Bảng theo khoảng thời gian hiển thị riêng lượt
+  & \hyperlink{F20}{F20}. Bảng theo năm đã chọn hiển thị riêng lượt
   đăng nhập, lượt mở ứng dụng, số người và số nhóm đã chat. Mặc định
   \textbf{Any count} hiển thị cả tài khoản có mở ứng dụng mà không đăng nhập lại
-  trong khoảng đã chọn. Biểu đồ \textbf{Monthly sign-ins} đếm số lượt đăng nhập
-  theo tháng. Biểu đồ \textbf{Active users} ở \textbf{Overview} đếm số tài khoản
+  trong năm đã chọn. Biểu đồ \textbf{Monthly sign-ins} đếm số lượt đăng nhập
+  toàn hệ thống theo từng tháng của năm đó. Biểu đồ \textbf{Active users} ở \textbf{Overview} đếm số tài khoản
   khác nhau có mở ứng dụng.\\
   \hline
 \end{longtable}
@@ -138,46 +139,18 @@ Nhãn tiếng Anh trong bảng được giữ theo giao diện.
 
 \paragraph{Bộ chọn thời gian}
 \mbox{}\par
-Các màn hình dùng chung nút \textbf{Period}, hiển thị khoảng đang áp dụng.
-Chế độ \textbf{Month} chọn tháng và năm; \textbf{Year} chọn cả năm;
-\textbf{Custom dates} chọn ngày bắt đầu và ngày kết thúc. Lịch sử báo cáo
-của một tài khoản dùng cùng nút với hai trường ngày. Biểu đồ theo năm dùng
-nút \textbf{Period} ở chế độ chọn năm và vẫn hiển thị các tháng trên trục ngang.
-Khoảng của bảng và năm của biểu đồ là hai lựa chọn độc lập khi cùng xuất hiện
-trên một màn hình. Bản Java Swing tính lại bảng và biểu đồ từ dữ liệu mẫu
-khi quản trị viên thay đổi khoảng thời gian.
-
-\paragraph{Ảnh nguyên mẫu tham chiếu}
-\mbox{}\par
-Các hình dưới đây minh họa bố cục Figma và dùng dữ liệu mẫu.
-
-\noindent\begin{minipage}{\linewidth}
-  \centering
-  \includegraphics[width=.92\linewidth]{images/admin-users.png}
-  \captionof{figure}{Danh sách tài khoản trong màn hình Users.}
-  \label{fig:admin-prototype-users}
-\end{minipage}
-
-\noindent\begin{minipage}{\linewidth}
-  \centering
-  \includegraphics[width=.92\linewidth]{images/admin-period-picker.png}
-  \captionof{figure}{Nút Period và chế độ chọn tháng trong Account History.}
-  \label{fig:admin-prototype-period}
-\end{minipage}
-
-\noindent\begin{minipage}{\linewidth}
-  \centering
-  \includegraphics[width=.92\linewidth]{images/admin-analytics-overview.png}
-  \captionof{figure}{Biểu đồ đăng ký theo tháng trong Analytics / Overview.}
-  \label{fig:admin-prototype-analytics}
-\end{minipage}
+Nút \textbf{Period} chọn một năm dương lịch dùng chung cho các màn hình
+quản trị có bộ lọc thời gian. Năm đã chọn được giữ khi chuyển màn hình.
+Danh sách theo thời gian hiển thị các bản ghi từ ngày 1 tháng 1 đến ngày 31
+tháng 12 của năm đó. Mọi biểu đồ hiển thị đủ 12 tháng từ tháng 1 đến tháng 12,
+kể cả khi một số tháng hoặc cả năm không có bản ghi.
 
 \paragraph{Ảnh giao diện Java Swing V1}
 \mbox{}\par
 Các ảnh dưới đây được kết xuất từ ứng dụng Java Swing trong mô-đun
 \texttt{admin-client}. Bản V1 mở trực tiếp màn hình \textbf{Users} và sử dụng
-dữ liệu mẫu trong bộ nhớ. Các thao tác trên tài khoản chỉ áp dụng trong phiên
-chạy thử. Báo cáo giữ các ảnh Figma ở trên làm tài liệu đối chiếu bố cục.
+dữ liệu mẫu trong bộ nhớ. Thay đổi tài khoản chỉ có hiệu lực trong phiên
+chạy thử. Biểu mẫu đổi mật khẩu minh họa kiểm tra dữ liệu nhập.
 
 \noindent\begin{minipage}{\linewidth}
   \centering
@@ -185,6 +158,13 @@ chạy thử. Báo cáo giữ các ảnh Figma ở trên làm tài liệu đối
   \includegraphics[width=.48\linewidth]{images/admin-swing-account-history.png}
   \captionof{figure}{F13 và F14. Danh sách tài khoản và lịch sử đăng nhập toàn hệ thống.}
   \label{fig:admin-swing-users-history}
+\end{minipage}
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.92\linewidth]{images/admin-swing-period-picker.png}
+  \captionof{figure}{Bộ chọn năm dùng chung, mở từ màn hình Account History.}
+  \label{fig:admin-swing-period}
 \end{minipage}
 
 \noindent\begin{minipage}{\linewidth}
@@ -199,7 +179,7 @@ chạy thử. Báo cáo giữ các ảnh Figma ở trên làm tài liệu đối
   \centering
   \includegraphics[width=.48\linewidth]{images/admin-swing-new-accounts.png}\hfill
   \includegraphics[width=.48\linewidth]{images/admin-swing-overview.png}
-  \captionof{figure}{F17 và F18. Tài khoản mới trong khoảng đã chọn và biểu đồ đăng ký theo tháng.}
+  \captionof{figure}{F17 và F18. Tài khoản mới trong năm đã chọn và biểu đồ đăng ký theo tháng.}
   \label{fig:admin-swing-registrations}
 \end{minipage}
 

@@ -3,45 +3,38 @@ package chatapp.admin.ui.shared;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.temporal.ChronoUnit;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.List;
 import java.util.Arrays;
 
 public final class BarChart extends JPanel {
-    private String[] labels;
+    private static final String[] MONTHS = Arrays.stream(Month.values())
+        .map(month -> month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)).toArray(String[]::new);
     private int[] values;
 
-    public BarChart(String[] labels, int[] values) {
+    public BarChart(int[] values) {
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(400, 178));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 178));
-        setSeries(labels, values);
+        getAccessibleContext().setAccessibleName("Monthly chart, January through December");
+        setSeries(values);
     }
 
-    public void setSeries(String[] labels, int[] values) {
-        this.labels = labels.clone();
+    public void setSeries(int[] values) {
+        if (values.length != MONTHS.length) throw new IllegalArgumentException("Expected twelve monthly values.");
         this.values = values.clone();
-        setToolTipText(values.length == 0 ? null : Arrays.toString(values));
+        setToolTipText(Arrays.toString(values));
         repaint();
     }
 
-    public static BarChart forDates(PeriodPicker.Range period, List<LocalDate> dates) {
-        long days = ChronoUnit.DAYS.between(period.from(), period.to());
-        if (days <= 30) {
-            var buckets = period.from().datesUntil(period.to().plusDays(1)).toList();
-            return new BarChart(buckets.stream().map(d -> buckets.size() <= 14 ? d.getMonthValue() + "/" + d.getDayOfMonth() : "").toArray(String[]::new),
-                buckets.stream().mapToInt(d -> (int) dates.stream().filter(d::equals).count()).toArray());
+    public static BarChart forDates(int year, List<LocalDate> dates) {
+        int[] counts = new int[MONTHS.length];
+        for (LocalDate date : dates) {
+            if (date.getYear() == year) counts[date.getMonthValue() - 1]++;
         }
-        YearMonth start = YearMonth.from(period.from()), end = YearMonth.from(period.to());
-        if (ChronoUnit.MONTHS.between(start, end) >= 36) {
-            int first = start.getYear(), last = end.getYear();
-            return new BarChart(java.util.stream.IntStream.rangeClosed(first, last).mapToObj(y -> last - first <= 14 ? String.valueOf(y) : "").toArray(String[]::new),
-                java.util.stream.IntStream.rangeClosed(first, last).map(y -> (int) dates.stream().filter(d -> d.getYear() == y).count()).toArray());
-        }
-        var months = java.util.stream.Stream.iterate(start, d -> !d.isAfter(end), d -> d.plusMonths(1)).toList();
-        return new BarChart(months.stream().map(d -> months.size() <= 14 ? d.getMonthValue() + "/" + d.getYear() % 100 : "").toArray(String[]::new),
-            months.stream().mapToInt(m -> (int) dates.stream().filter(d -> YearMonth.from(d).equals(m)).count()).toArray());
+        return new BarChart(counts);
     }
 
     @Override protected void paintComponent(Graphics graphics) {
@@ -49,12 +42,6 @@ public final class BarChart extends JPanel {
         Graphics2D g = (Graphics2D) graphics.create();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setFont(Ui.muted("").getFont().deriveFont(11f));
-        if (values.length == 0 || Arrays.stream(values).noneMatch(value -> value > 0)) {
-            g.setColor(Ui.MUTED);
-            g.drawString("No records for this period", 34, getHeight() / 2);
-            g.dispose();
-            return;
-        }
         int left = 34, top = 12, base = getHeight() - 28, height = base - top;
         int plotWidth = Math.max(1, getWidth() - left - 12);
         int step = Math.max(1, (int) Math.ceil(Arrays.stream(values).max().orElse(0) / 4.0));
@@ -73,7 +60,11 @@ public final class BarChart extends JPanel {
             g.setColor(Ui.BLUE);
             if (bar > 0) g.fillRoundRect(mid - width / 2, base - bar, width, bar, 4, 4);
             g.setColor(Ui.MUTED);
-            g.drawString(labels[i], mid - g.getFontMetrics().stringWidth(labels[i]) / 2, base + 17);
+            g.drawString(MONTHS[i], mid - g.getFontMetrics().stringWidth(MONTHS[i]) / 2, base + 17);
+        }
+        if (Arrays.stream(values).allMatch(value -> value == 0)) {
+            String message = "No records for this year";
+            g.drawString(message, left + (plotWidth - g.getFontMetrics().stringWidth(message)) / 2, top + height / 2);
         }
         g.dispose();
     }

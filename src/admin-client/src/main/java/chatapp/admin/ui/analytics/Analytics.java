@@ -10,31 +10,25 @@ import chatapp.admin.ui.shared.Ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.IntPredicate;
 
 public final class Analytics extends Screen {
     private static final String[] TABS = {"Overview", "Friend Counts", "Activity"};
     private static final String[] METRICS = {"Registrations", "Sign-ins", "Active users", "Messages sent"};
-    private static final String[] MONTHS = java.util.Arrays.stream(Month.values())
-        .map(month -> month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)).toArray(String[]::new);
     private final PreviewData data;
     private String tab = TABS[0];
-    private int overviewYear = PreviewData.NOW.getYear();
-    private int activityYear = overviewYear;
+    private final PeriodPicker period;
     private String metric = METRICS[0];
-    private Range activityRange = PeriodPicker.SAMPLE;
 
-    public Analytics(PreviewData data) {
+    public Analytics(PreviewData data, PeriodPicker period) {
         this.data = data;
+        this.period = period;
         refresh();
     }
 
-    public void refresh() {
+    private void refresh() {
         JPanel page = page("Analytics");
         Ui.add(page, Ui.tabs(tab, TABS, selected -> {
             tab = selected;
@@ -50,17 +44,14 @@ public final class Analytics extends Screen {
 
     private void overview(JPanel page) {
         JPanel filters = Ui.row();
-        filters.add(PeriodPicker.year(overviewYear, year -> {
-            overviewYear = year;
-            refresh();
-        }));
+        filters.add(period.button(this::refresh));
         Ui.add(page, filters);
         JPanel summaries = new JPanel(new GridLayout(1, 4, 12, 0));
         summaries.setOpaque(false);
         for (String label : METRICS) {
             JPanel card = Ui.card(new BorderLayout(0, 6));
             card.add(Ui.muted(label), BorderLayout.NORTH);
-            card.add(Ui.label(Integer.toString(count(label, Range.year(overviewYear))), 22, true));
+            card.add(Ui.label(Integer.toString(count(label, period.range())), 22, true));
             summaries.add(card);
         }
         Ui.add(page, summaries);
@@ -73,13 +64,13 @@ public final class Analytics extends Screen {
         header.add(Ui.muted("Graph"));
         header.add(picker);
         chart.add(header, BorderLayout.NORTH);
-        BarChart graph = new BarChart(MONTHS, monthly(metric, overviewYear));
+        BarChart graph = new BarChart(monthly(metric, period.year()));
         chart.add(graph);
         JLabel note = Ui.muted(chartNote(metric));
         chart.add(note, BorderLayout.SOUTH);
         picker.addActionListener(e -> {
             metric = (String) picker.getSelectedItem();
-            graph.setSeries(MONTHS, monthly(metric, overviewYear));
+            graph.setSeries(monthly(metric, period.year()));
             note.setText(chartNote(metric));
         });
         Ui.add(page, chart);
@@ -87,7 +78,7 @@ public final class Analytics extends Screen {
 
     private String chartNote(String selected) {
         String definition = selected.equals("Active users") ? "Distinct accounts that opened the app. " : "";
-        return definition + (overviewYear == PreviewData.NOW.getYear()
+        return definition + (period.year() == PreviewData.NOW.getYear()
             ? "Sample data through November 11, 2026." : "No sample records for this year.");
     }
 
@@ -197,10 +188,6 @@ public final class Analytics extends Screen {
         JPanel filters = Ui.row();
         JTextField search = Ui.field("Find a person", 15);
         filters.add(Ui.search(search));
-        filters.add(PeriodPicker.range(activityRange, range -> {
-            activityRange = range;
-            refresh();
-        }));
         String[] metrics = {"Sign-ins", "App opens", "People chatted with", "Groups chatted in"};
         JComboBox<String> metricFilter = Ui.choice(metrics);
         metricFilter.getAccessibleContext().setAccessibleName("Activity to compare");
@@ -210,20 +197,26 @@ public final class Analytics extends Screen {
         filters.add(comparison);
         JTextField count = Ui.field("Any count", 7);
         filters.add(count);
-        Ui.add(page, filters);
         JTable table = Ui.table("Full name", "Username", "Created", metrics[0], metrics[1], metrics[2], metrics[3]);
         table.setRowHeight(36);
         table.getColumnModel().getColumn(5).setPreferredWidth(152);
         table.getColumnModel().getColumn(6).setPreferredWidth(148);
+        BarChart graph = new BarChart(monthly("Sign-ins", period.year()));
         Runnable update = () -> {
+            var range = period.range();
             IntPredicate matches = numberFilter(count, (String) comparison.getSelectedItem());
             Ui.rows(table, data.users.stream().filter(u -> Ui.matches(search.getText(), u.name(), u.username()))
                 .map(u -> {
-                    PreviewData.Activity record = data.activity(u.id(), activityRange);
+                    PreviewData.Activity record = data.activity(u.id(), range);
                     return new Object[]{u.name(), data.handle(u.id()), u.created().toLocalDate(), record.signIns(), record.opens(), record.people(), record.groups()};
                 }).filter(row -> (int) row[3] + (int) row[4] + (int) row[5] + (int) row[6] > 0)
                 .filter(row -> matches.test((int) row[metricFilter.getSelectedIndex() + 3])).toList());
         };
+        filters.add(period.button(() -> {
+            update.run();
+            graph.setSeries(monthly("Sign-ins", period.year()));
+        }), 1);
+        Ui.add(page, filters);
         Ui.onText(search, update);
         Ui.onText(count, update);
         metricFilter.addActionListener(e -> update.run());
@@ -233,11 +226,6 @@ public final class Analytics extends Screen {
         JPanel chart = Ui.card(new BorderLayout(0, 12));
         JPanel header = Ui.row();
         header.add(Ui.label("Monthly sign-ins", 16, true));
-        BarChart graph = new BarChart(MONTHS, monthly("Sign-ins", activityYear));
-        header.add(PeriodPicker.year(activityYear, year -> {
-            activityYear = year;
-            graph.setSeries(MONTHS, monthly("Sign-ins", year));
-        }));
         chart.add(header, BorderLayout.NORTH);
         chart.add(graph);
         chart.add(Ui.muted("Sign-in events per month."), BorderLayout.SOUTH);

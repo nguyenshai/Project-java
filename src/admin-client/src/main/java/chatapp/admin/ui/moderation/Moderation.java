@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import static chatapp.admin.ui.accounts.Accounts.DATE;
@@ -19,13 +18,14 @@ import static chatapp.admin.ui.accounts.Accounts.TIME;
 
 public final class Moderation extends Screen {
     private final PreviewData data;
-    private PeriodPicker.Range period = PeriodPicker.SAMPLE;
+    private final PeriodPicker period;
     private String reportQuery = "";
     private String reportStatus = "All statuses";
     private String notice = "";
 
-    public Moderation(PreviewData data, String page) {
+    public Moderation(PreviewData data, PeriodPicker period, String page) {
         this.data = data;
+        this.period = period;
         switch (page) {
             case "Chat Groups" -> groups();
             case "Spam Reports" -> reports(false);
@@ -43,16 +43,24 @@ public final class Moderation extends Screen {
         JPanel results = Ui.column();
         Runnable update = () -> {
             results.removeAll();
+            var range = period.range();
             if (registrations) {
                 JTable table = Ui.table("Created", "Username", "Full name");
-                Ui.add(results, Ui.scrollTable(table));
-                Ui.rows(table, data.users.stream().filter(u -> period.includes(u.created().toLocalDate())
+                var users = data.users.stream().filter(u -> range.includes(u.created().toLocalDate())
                     && Ui.matches(search.getText(), u.name(), data.handle(u.id())))
-                    .sorted(Comparator.comparing(User::created).reversed())
-                    .map(u -> new Object[]{u.created(), data.handle(u.id()), u.name()}).toList());
+                    .sorted(Comparator.comparing(User::created).reversed()).toList();
+                JPanel split = new JPanel(new GridLayout(1, 2, 16, 0));
+                split.setOpaque(false);
+                split.add(Ui.scrollTable(table));
+                Ui.rows(table, users.stream().map(u -> new Object[]{u.created(), data.handle(u.id()), u.name()}).toList());
                 timestampColumn(table, 0);
+                JPanel chart = Ui.card(new BorderLayout(0, 12));
+                chart.add(Ui.label("Monthly registrations", 17, true), BorderLayout.NORTH);
+                chart.add(BarChart.forDates(period.year(), users.stream().map(u -> u.created().toLocalDate()).toList()));
+                split.add(chart);
+                Ui.add(results, split);
             } else {
-                var rows = data.signIns.stream().filter(s -> period.includes(s.at().toLocalDate())
+                var rows = data.signIns.stream().filter(s -> range.includes(s.at().toLocalDate())
                     && Ui.matches(search.getText(), data.name(s.userId()), data.handle(s.userId())))
                     .sorted(Comparator.comparing(SignIn::at).reversed()).toList();
                 JPanel split = new JPanel(new GridLayout(1, 2, 16, 0));
@@ -67,14 +75,16 @@ public final class Moderation extends Screen {
                 var byDay = dates.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
                 LocalDate peak = byDay.keySet().stream().max(Comparator.comparingLong((LocalDate d) -> byDay.get(d))
                     .thenComparing(Comparator.naturalOrder())).orElse(null);
-                LocalDate quiet = period.from().datesUntil(period.to().plusDays(1))
+                LocalDate cutoff = PreviewData.NOW.toLocalDate();
+                LocalDate lastDay = range.to().isBefore(cutoff) ? range.to() : cutoff;
+                LocalDate quiet = dates.isEmpty() ? null : range.from().datesUntil(lastDay.plusDays(1))
                     .min(Comparator.comparingLong((LocalDate d) -> byDay.getOrDefault(d, 0L)).thenComparing(Comparator.reverseOrder()))
                     .orElse(null);
                 Ui.add(chart, metrics(new String[]{"Total sign-ins", "Unique users", dayLabel("Peak day", peak), dayLabel("Quietest day", quiet)},
                     new long[]{rows.size(), rows.stream().map(SignIn::userId).distinct().count(),
                         peak == null ? 0 : byDay.get(peak), quiet == null ? 0 : byDay.getOrDefault(quiet, 0L)}));
-                Ui.add(chart, Ui.label("Sign-ins by date", 14, true));
-                Ui.add(chart, BarChart.forDates(period, dates));
+                Ui.add(chart, Ui.label("Monthly sign-ins", 14, true));
+                Ui.add(chart, BarChart.forDates(period.year(), dates));
                 JPanel chartCard = Ui.card(new BorderLayout());
                 chartCard.add(chart);
                 split.add(chartCard);
@@ -83,7 +93,7 @@ public final class Moderation extends Screen {
             results.revalidate();
             results.repaint();
         };
-        tools.add(PeriodPicker.range(period, value -> { period = value; update.run(); }));
+        tools.add(period.button(update));
         Ui.add(page, tools);
         Ui.add(page, results);
         Ui.onText(search, update);
@@ -158,7 +168,7 @@ public final class Moderation extends Screen {
         Runnable update = () -> Ui.rows(table, groupEvents(group).stream()
             .filter(e -> Ui.matches(search.getText(), e.detail()) && (kinds.getSelectedIndex() == 0 || e.type().equals(kinds.getSelectedItem())))
             .map(e -> new Object[]{e.at(), e.type(), e.detail()}).toList());
-        bar.add(PeriodPicker.range(period, r -> { period = r; update.run(); }));
+        bar.add(period.button(update));
         Ui.add(page, bar);
         Ui.add(page, Ui.muted("Activity timeline  ·  Read only"));
         Ui.add(page, Ui.scrollTable(table));
@@ -168,42 +178,50 @@ public final class Moderation extends Screen {
     }
 
     private List<Event> groupEvents(Group group) {
-        return data.events.stream().filter(e -> e.group().equals(group.name()) && period.includes(e.at().toLocalDate()))
+        var range = period.range();
+        return data.events.stream().filter(e -> e.group().equals(group.name()) && range.includes(e.at().toLocalDate()))
             .sorted(Comparator.comparing(Event::at).reversed()).toList();
     }
 
     private void monitoring(JPanel page, Group group) {
         JPanel tools = Ui.row();
-        var graph = Ui.choice(new String[]{"Activities", "Messages", "Members"});
+        var graph = Ui.choice(new String[]{"Activities", "Messages", "Members joined"});
         JPanel results = Ui.column();
         Runnable update = () -> {
             results.removeAll();
             var events = groupEvents(group);
             var messages = events.stream().filter(e -> e.type().equals("Message")).toList();
-            long admins = members(group).stream().filter(m -> m.role().equals("Group admin")).count();
-            Ui.add(results, metrics(new String[]{"Activities", "Messages", "Members"},
-                new long[]{events.size(), messages.size(), members(group).size()}));
+            var joins = memberJoinDates(group);
+            long joinedThisYear = joins.stream().filter(date -> date.getYear() == period.year()).count();
+            Ui.add(results, metrics(new String[]{"Activities", "Messages", "Members joined"},
+                new long[]{events.size(), messages.size(), joinedThisYear}));
             JPanel chart = Ui.column();
-            Ui.add(chart, Ui.label("Group Activity", 17, true));
-            Ui.add(chart, switch (graph.getSelectedIndex()) {
-                case 1 -> BarChart.forDates(period, messages.stream().map(e -> e.at().toLocalDate()).toList());
-                case 2 -> new BarChart(new String[]{"Group admins", "Other members"},
-                    new int[]{(int) admins, members(group).size() - (int) admins});
-                default -> BarChart.forDates(period, events.stream().map(e -> e.at().toLocalDate()).toList());
-            });
+            Ui.add(chart, Ui.label("Monthly " + graph.getSelectedItem().toString().toLowerCase(java.util.Locale.ENGLISH), 17, true));
+            var dates = switch (graph.getSelectedIndex()) {
+                case 1 -> messages.stream().map(e -> e.at().toLocalDate()).toList();
+                case 2 -> joins;
+                default -> events.stream().map(e -> e.at().toLocalDate()).toList();
+            };
+            Ui.add(chart, BarChart.forDates(period.year(), dates));
             JPanel card = Ui.card(new BorderLayout());
             card.add(chart);
             Ui.add(results, card);
             results.revalidate();
             results.repaint();
         };
-        tools.add(PeriodPicker.range(period, r -> { period = r; update.run(); }));
+        tools.add(period.button(update));
         tools.add(Ui.muted("Graph"));
         tools.add(graph);
         Ui.add(page, tools);
         Ui.add(page, results);
         graph.addActionListener(e -> update.run());
         update.run();
+    }
+
+    private List<LocalDate> memberJoinDates(Group group) {
+        var dates = data.events.stream().filter(e -> e.group().equals(group.name()) && e.type().equals("Member joined"))
+            .map(e -> e.at().toLocalDate()).toList();
+        return dates.isEmpty() ? group.members().stream().map(Member::joined).toList() : dates;
     }
 
     private void reports(boolean byAccount) {
@@ -228,12 +246,13 @@ public final class Moderation extends Screen {
                 List<String> visible = grouped.keySet().stream()
                     .filter(id -> reportStatus.equals("All statuses") || reportStatus.equals(data.status(id)))
                     .sorted(Comparator.comparing((String id) -> grouped.get(id).getFirst().at()).reversed()).toList();
+                var range = period.range();
                 JTable table = Ui.table("Reported account", "Username", "Reports", "Last reported", "Prior locks", "Account status", "");
                 table.getColumnModel().getColumn(6).setMaxWidth(40);
                 timestampColumn(table, 3);
                 Ui.add(results, Ui.scrollTable(table));
                 Ui.rows(table, visible.stream().map(id -> new Object[]{data.name(id), data.handle(id), grouped.get(id).size(),
-                    grouped.get(id).getFirst().at(), data.locks.stream().filter(e -> e.userId().equals(id) && e.locked()).count(),
+                    grouped.get(id).getFirst().at(), data.locks.stream().filter(e -> e.userId().equals(id) && e.locked() && range.includes(e.at().toLocalDate())).count(),
                     data.status(id), "›"}).toList());
                 Ui.onRow(table, row -> accountReports(visible.get(row)));
                 Ui.add(results, Ui.muted(visible.size() + " reported accounts"));
@@ -243,7 +262,7 @@ public final class Moderation extends Screen {
             results.revalidate();
             results.repaint();
         };
-        filters.add(PeriodPicker.range(period, r -> { period = r; update.run(); }));
+        filters.add(period.button(update));
         if (byAccount) filters.add(status);
         Ui.add(page, filters);
         if (!notice.isEmpty()) Ui.add(page, Ui.label(notice, 14, true));
@@ -255,7 +274,8 @@ public final class Moderation extends Screen {
     }
 
     private List<Report> reportsInPeriod() {
-        return data.reports.stream().filter(r -> period.includes(r.at().toLocalDate()))
+        var range = period.range();
+        return data.reports.stream().filter(r -> range.includes(r.at().toLocalDate()))
             .sorted(Comparator.comparing(Report::at).reversed()).toList();
     }
 
@@ -275,15 +295,16 @@ public final class Moderation extends Screen {
         JPanel page = page(data.name(id));
         addBack(page, "Reported accounts", () -> reports(true));
         Ui.add(page, Ui.muted(data.handle(id) + "  ·  " + data.status(id)));
-        Ui.add(page, PeriodPicker.customDates(period, r -> { period = r; accountReports(id); }));
-        Ui.add(page, Ui.label("Reports in selected period", 16, true));
+        Ui.add(page, period.button(() -> accountReports(id)));
+        Ui.add(page, Ui.label("Reports in selected year", 16, true));
         reportTable(page, reportsInPeriod().stream().filter(r -> r.reported().equals(id)).toList(),
             r -> reportDetail(r, () -> accountReports(id)));
         Ui.add(page, Ui.label("Admin lock history", 16, true));
         JTable table = Ui.table("When", "Action", "Admin");
         timestampColumn(table, 0);
         Ui.add(page, Ui.scrollTable(table));
-        Ui.rows(table, data.locks.stream().filter(e -> e.userId().equals(id))
+        var range = period.range();
+        Ui.rows(table, data.locks.stream().filter(e -> e.userId().equals(id) && range.includes(e.at().toLocalDate()))
             .sorted(Comparator.comparing(LockAction::at).reversed())
             .map(e -> new Object[]{e.at(), e.locked() ? "Account locked" : "Account unlocked", "Alex Morgan"}).toList());
         display(page);
