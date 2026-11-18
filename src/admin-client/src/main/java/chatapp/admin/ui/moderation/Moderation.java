@@ -179,7 +179,7 @@ public final class Moderation extends Screen {
 
     private List<Event> groupEvents(Group group) {
         var range = period.range();
-        return data.events.stream().filter(e -> e.group().equals(group.name()) && range.includes(e.at().toLocalDate()))
+        return data.events.stream().filter(e -> e.groupId() == group.id() && range.includes(e.at().toLocalDate()))
             .sorted(Comparator.comparing(Event::at).reversed()).toList();
     }
 
@@ -219,7 +219,7 @@ public final class Moderation extends Screen {
     }
 
     private List<LocalDate> memberJoinDates(Group group) {
-        var dates = data.events.stream().filter(e -> e.group().equals(group.name()) && e.type().equals("Member joined"))
+        var dates = data.events.stream().filter(e -> e.groupId() == group.id() && e.type().equals("Member joined"))
             .map(e -> e.at().toLocalDate()).toList();
         return dates.isEmpty() ? group.members().stream().map(Member::joined).toList() : dates;
     }
@@ -306,7 +306,7 @@ public final class Moderation extends Screen {
         var range = period.range();
         Ui.rows(table, data.locks.stream().filter(e -> e.userId().equals(id) && range.includes(e.at().toLocalDate()))
             .sorted(Comparator.comparing(LockAction::at).reversed())
-            .map(e -> new Object[]{e.at(), e.locked() ? "Account locked" : "Account unlocked", "Alex Morgan"}).toList());
+            .map(e -> new Object[]{e.at(), e.locked() ? "Account locked" : "Account unlocked", PreviewData.ADMIN_NAME}).toList());
         display(page);
     }
 

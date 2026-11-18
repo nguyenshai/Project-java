@@ -114,22 +114,40 @@ public final class Ui {
     }
 
     public static JTextField field(String hint, int columns) {
-        JTextField f = new JTextField(columns) {
+        return styled(new JTextField(columns) {
             @Override protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                if (getText().isEmpty() && !isFocusOwner()) {
-                    g.setColor(MUTED);
-                    Insets insets = getInsets();
-                    g.drawString(hint, insets.left, (getHeight() + g.getFontMetrics().getAscent()
-                        - g.getFontMetrics().getDescent()) / 2);
-                }
+                paintHint(this, g, hint);
             }
-        };
+        }, hint);
+    }
+
+    /** A password input styled exactly like {@link #field}: same border, hint and accessible name. */
+    public static JPasswordField password(String hint, int columns) {
+        return styled(new JPasswordField(columns) {
+            @Override protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                paintHint(this, g, hint);
+            }
+        }, hint);
+    }
+
+    private static <T extends JTextField> T styled(T f, String hint) {
         f.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(LINE),
                 BorderFactory.createEmptyBorder(7, 10, 7, 10)));
         f.setToolTipText(hint);
         f.getAccessibleContext().setAccessibleName(hint);
         return f;
+    }
+
+    /** Draws the grey hint while an input is empty and not focused. */
+    private static void paintHint(JTextField f, Graphics g, String hint) {
+        if (f.getDocument().getLength() == 0 && !f.isFocusOwner()) {
+            g.setColor(MUTED);
+            Insets insets = f.getInsets();
+            g.drawString(hint, insets.left, (f.getHeight() + g.getFontMetrics().getAscent()
+                - g.getFontMetrics().getDescent()) / 2);
+        }
     }
 
     public static JPanel search(JTextField field) {

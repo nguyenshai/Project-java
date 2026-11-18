@@ -151,6 +151,23 @@ class AdminUiTest {
         });
     }
 
+    @Test
+    void adminLoginRequiresBothFieldsBeforeOpeningTheWorkspace() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            int[] signIns = {0};
+            JPanel login = AdminFrame.createLogin(() -> signIns[0]++);
+            button(login, "Sign in").doClick(0);
+            assertEquals(0, signIns[0]);
+            assertTrue(components(login).stream().filter(JLabel.class::isInstance).map(JLabel.class::cast)
+                .anyMatch(l -> "Enter your username and password.".equals(l.getText())));
+            components(login).stream().filter(c -> c instanceof JTextField && !(c instanceof JPasswordField)).map(JTextField.class::cast).findFirst().orElseThrow().setText("admin");
+            components(login).stream().filter(JPasswordField.class::isInstance).map(JPasswordField.class::cast)
+                .findFirst().orElseThrow().setText("secret");
+            button(login, "Sign in").doClick(0);
+            assertEquals(1, signIns[0]);
+        });
+    }
+
     private static JTable table(Container root) {
         return components(root).stream().filter(JTable.class::isInstance).map(JTable.class::cast)
             .findFirst().orElseThrow();

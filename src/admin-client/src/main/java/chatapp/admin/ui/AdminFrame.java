@@ -2,6 +2,7 @@ package chatapp.admin.ui;
 
 import chatapp.admin.ui.accounts.Accounts;
 import chatapp.admin.ui.analytics.Analytics;
+import chatapp.admin.ui.login.AdminLogin;
 import chatapp.admin.ui.moderation.Moderation;
 import chatapp.admin.ui.preview.PreviewData;
 import chatapp.admin.ui.shared.PeriodPicker;
@@ -12,18 +13,49 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class AdminFrame extends JFrame {
+    private final CardLayout cards = new CardLayout();
+    private final JPanel root = new JPanel(cards);
+    private final AdminLogin login;
+    private JPanel workspace;
+
     public AdminFrame() {
         super("ChatApp Admin");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setContentPane(createContent());
+        Ui.install();
+        login = new AdminLogin(this::showWorkspace);
+        root.add(login, "Login");
+        setContentPane(root);
         setSize(1280, 800);
         setMinimumSize(new Dimension(1050, 660));
         setLocationRelativeTo(null);
     }
 
+    /** Opens a fresh workspace, so preview edits from a previous session are discarded. */
+    private void showWorkspace() {
+        if (workspace != null) root.remove(workspace);
+        workspace = createContent(this::showLogin);
+        root.add(workspace, "Workspace");
+        cards.show(root, "Workspace");
+    }
+
+    private void showLogin() {
+        login.reset();
+        cards.show(root, "Login");
+    }
+
+    /** The signed-in workspace without a sign-out target; used directly by tests. */
     public static JPanel createContent() {
+        return createContent(() -> {});
+    }
+
+    public static JPanel createContent(Runnable onSignOut) {
         Ui.install();
-        return new Workspace();
+        return new Workspace(onSignOut);
+    }
+
+    public static AdminLogin createLogin(Runnable onSignIn) {
+        Ui.install();
+        return new AdminLogin(onSignIn);
     }
 
     private static final class Workspace extends JPanel {
@@ -31,10 +63,12 @@ public final class AdminFrame extends JFrame {
         private final PeriodPicker period = new PeriodPicker(PreviewData.NOW.getYear());
         private final JPanel content = new JPanel(new CardLayout());
         private final Map<String, JButton> buttons = new LinkedHashMap<>();
+        private final Runnable onSignOut;
         private Component current;
 
-        Workspace() {
+        Workspace(Runnable onSignOut) {
             super(new BorderLayout());
+            this.onSignOut = onSignOut;
             add(sidebar(), BorderLayout.WEST);
             add(content, BorderLayout.CENTER);
             showPage("Users");
@@ -70,17 +104,14 @@ public final class AdminFrame extends JFrame {
             divider.setForeground(Ui.RAIL_ACTIVE);
             divider.setMaximumSize(new Dimension(192, 1));
             side.add(divider);
-            JLabel admin = Ui.label("   AM    Alex Morgan", 13, true);
+            JLabel admin = Ui.label("   " + PreviewData.ADMIN_NAME, 13, true);
             admin.setForeground(Color.WHITE);
             side.add(Box.createVerticalStrut(12));
             side.add(admin);
             side.add(Box.createVerticalStrut(6));
             JButton signOut = Ui.button("Sign Out", Ui.RAIL, Ui.RAIL_MUTED, () -> {
-                if (JOptionPane.showConfirmDialog(this, "Close the Admin preview?", "Sign Out",
-                        JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                    Window window = SwingUtilities.getWindowAncestor(this);
-                    if (window != null) window.dispose();
-                }
+                if (JOptionPane.showConfirmDialog(this, "Sign out of ChatApp Admin?", "Sign Out",
+                        JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) onSignOut.run();
             });
             signOut.setIcon(Ui.icon("exit", 17));
             signOut.setHorizontalAlignment(SwingConstants.LEFT);

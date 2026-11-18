@@ -73,8 +73,9 @@ với yêu cầu, bao gồm các điều khiển thao tác, lọc và sắp xế
 \label{par:admin-navigation}
 \mbox{}\par
 Thanh điều hướng bên trái chia thành \textbf{Manage Accounts},
-\textbf{Monitor \& Moderate} và \textbf{Analyze Usage}. Màn hình
-\textbf{Users} mở khi chạy bản xem thử V1. Bảng~\ref{tab:admin-screen-map}
+\textbf{Monitor \& Moderate} và \textbf{Analyze Usage}. Khi chạy bản xem thử V1,
+ứng dụng mở màn hình \textbf{Admin Sign in}; sau khi đăng nhập, màn hình
+\textbf{Users} được hiển thị. Bảng~\ref{tab:admin-screen-map}
 đối chiếu giao diện Swing với nguyên mẫu Figma và mã chức năng của đề bài.
 Nhãn tiếng Anh trong bảng được giữ theo giao diện.
 
@@ -91,6 +92,12 @@ Nhãn tiếng Anh trong bảng được giữ theo giao diện.
   \textbf{Màn hình} & \textbf{Chức năng và nội dung hiển thị}\\
   \hline
   \endhead
+  Admin Sign in
+  & Màn hình đăng nhập riêng của ứng dụng quản trị, tách biệt với màn hình
+  đăng nhập của ứng dụng người sử dụng. Gồm tên đăng nhập, mật khẩu và thông báo
+  khi bỏ trống. Ở V2, server kiểm tra mật khẩu và quyền \texttt{ADMIN}
+  trước khi mở phiên làm việc; \textbf{Sign Out} quay lại màn hình này.\\
+  \hline
   \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=2-80}{Users}
   & \hyperlink{F13}{F13}. Danh sách và hồ sơ tài khoản, biểu mẫu thêm/sửa,
   đổi mật khẩu, khóa/mở khóa và xác nhận xóa. Hồ sơ có các thẻ
@@ -139,6 +146,9 @@ Nhãn tiếng Anh trong bảng được giữ theo giao diện.
 
 \paragraph{Bộ chọn thời gian}
 \mbox{}\par
+Nhóm thống nhất áp dụng ``khoảng thời gian'' trong đề bài (danh sách đăng ký mới,
+người dùng hoạt động và lọc báo cáo spam theo thời gian) theo đơn vị năm dương lịch,
+đồng bộ với các biểu đồ theo năm.
 Nút \textbf{Period} chọn một năm dương lịch dùng chung cho các màn hình
 quản trị có bộ lọc thời gian. Năm đã chọn được giữ khi chuyển màn hình.
 Danh sách theo thời gian hiển thị các bản ghi từ ngày 1 tháng 1 đến ngày 31
@@ -148,9 +158,20 @@ kể cả khi một số tháng hoặc cả năm không có bản ghi.
 \paragraph{Ảnh giao diện Java Swing V1}
 \mbox{}\par
 Các ảnh dưới đây được kết xuất từ ứng dụng Java Swing trong mô-đun
-\texttt{admin-client}. Bản V1 mở trực tiếp màn hình \textbf{Users} và sử dụng
-dữ liệu mẫu trong bộ nhớ. Thay đổi tài khoản chỉ có hiệu lực trong phiên
+\texttt{admin-client}. Bản V1 mở màn hình \textbf{Admin Sign in}, sau đó đến
+màn hình \textbf{Users}, và sử dụng dữ liệu mẫu trong bộ nhớ. Ở V1, màn hình
+đăng nhập chấp nhận mọi tên đăng nhập và mật khẩu không bỏ trống (ví dụ
+\texttt{admin} / \texttt{admin}); server kiểm tra quyền \texttt{ADMIN} ở V2. Dữ liệu
+mẫu trùng với dữ liệu của ứng dụng người sử dụng. Tên quản trị viên
+hiển thị mặc định là \textbf{Admin}. Thay đổi tài khoản chỉ có hiệu lực trong phiên
 chạy thử. Biểu mẫu đổi mật khẩu minh họa kiểm tra dữ liệu nhập.
+
+\noindent\begin{minipage}{\linewidth}
+  \centering
+  \includegraphics[width=.74\linewidth]{images/admin-swing-login.png}
+  \captionof{figure}{Màn hình đăng nhập của ứng dụng quản trị.}
+  \label{fig:admin-swing-login}
+\end{minipage}
 
 \noindent\begin{minipage}{\linewidth}
   \centering

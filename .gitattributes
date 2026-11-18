@@ -1,0 +1,16 @@
+# Store text files with LF in the repository; each machine checks them out with its own line endings.
+* text=auto
+
+# Windows scripts keep CRLF, Unix scripts keep LF, whatever the machine.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+mvnw text eol=lf
+*.sh text eol=lf
+
+# Binary files are never converted or diffed as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.jar binary
+*.drawio.png binary
