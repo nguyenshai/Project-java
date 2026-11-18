@@ -1,0 +1,84 @@
+\section{System design}
+
+\subsection{System overview}
+\label{subsec:system-overview}
+
+The chat system follows a client--server model: two Windows desktop applications,
+one for administrators and one for users, a Spring Boot backend and a PostgreSQL
+database. Both client applications are planned in Java Swing and talk to the
+backend over TCP sockets, without WebSocket.
+
+The administrator application provides the interface for managing and monitoring
+the system; the user application provides the interface for the account, friends
+and messaging. By design, the backend receives requests from the clients, runs the
+business logic, checks access rights and returns the results. Data is planned to be
+stored in PostgreSQL and accessed by the backend through JDBC. The clients never
+connect to the database directly.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{images/System Overview.drawio.png}
+  \caption{Overall architecture of the chat system.}
+  \label{fig:system-architecture}
+\end{figure}
+
+\begingroup
+\small
+\begin{longtable}{|L{3.1cm}|L{3.9cm}|L{\dimexpr\textwidth-7cm-6\tabcolsep-4\arrayrulewidth\relax}|}
+  \caption{Technologies used in the system}
+  \label{tab:technologies}\\
+  \hline
+  \textbf{Component} & \textbf{Technology} & \textbf{Purpose}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Component} & \textbf{Technology} & \textbf{Purpose}\\
+  \hline
+  \endhead
+  Programming language & Java 21 & Build the client applications and the backend\\
+  \hline
+  Windows interface & Java Swing & Build the administrator and user interfaces\\
+  \hline
+  Backend framework & Spring Boot & Organise the backend and the business logic\\
+  \hline
+  Client--server communication & TCP sockets &
+  Exchange requests, responses and messages between clients and the server\\
+  \hline
+  Database & PostgreSQL & Store the system data\\
+  \hline
+  Data access & JDBC and the PostgreSQL JDBC Driver &
+  Connect the backend to the database and run queries\\
+  \hline
+  Project management & Maven & Manage libraries, compile and package the applications\\
+  \hline
+  Testing & JUnit & Test the application components\\
+  \hline
+  Source control & Git and GitHub & Track changes and develop together\\
+  \hline
+\end{longtable}
+\endgroup
+
+In Version 1, the team focuses on the interface design of both subsystems and on
+the database. The architecture above guides the implementation stage; the backend
+and the socket communication do not have to be finished in this version.
+
+\clearpage
+\subsection{Component design}
+\label{subsec:component-design}
+
+This part defines the scope of the two client applications, the role of the
+backend and the planned groups of data. The function lists are the reference for
+checking the interface and the database design in V1; they are not a list of
+finished functions. The screens, table structures and data relationships are
+described in the matching detailed design parts.
+
+\input{sections/03-02-02-user-application}
+
+\clearpage
+\input{sections/03-02-01-admin-application}
+
+\clearpage
+\input{sections/03-02-03-backend-spring-boot}
+
+\clearpage
+\input{sections/03-02-04-postgresql-database}

@@ -5,7 +5,7 @@ V1 is a UI prototype: every screen is navigable and driven by in-memory preview 
 network or database access yet. Owner: Châu Vũ Trung (tasks T02, T06 in the report).
 
 Design source: Figma file `maCogjZs9eOOhfkxsOZoIU` ("ChatApp Admin"). Node links per screen are in
-`doc/report version 1/sections/03-02-01-ung-dung-quan-tri.tex`.
+`doc/report version 1/sections/03-02-01-admin-application.tex`.
 
 ## Run and test
 

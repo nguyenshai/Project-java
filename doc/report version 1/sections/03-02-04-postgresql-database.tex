@@ -1,0 +1,92 @@
+\subsubsection{Database -- PostgreSQL}
+\label{subsubsec:postgresql-database}
+
+The system database is planned on PostgreSQL and stores, in one place, the data
+used by both the administrator and the user subsystems. The design aims to support
+the functions in the assignment, limit duplicated data and keep related
+information consistent.
+
+The planned groups of data are:
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|L{2cm}|L{4cm}|L{3cm}|L{\dimexpr\textwidth-9cm-8\tabcolsep-5\arrayrulewidth\relax}|}
+  \caption{Planned data groups and who works with them}
+  \label{tab:data-groups}\\
+  \hline
+  \textbf{Data group} & \textbf{Planned content} &
+  \textbf{Purpose} & \textbf{Actor and scope}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Data group} & \textbf{Planned content} &
+  \textbf{Purpose} & \textbf{Actor and scope}\\
+  \hline
+  \endhead
+  Accounts &
+  Username, hashed password, personal profile, role and account status &
+  Sign-in, authorization and user management &
+  \textbf{User:} registers, updates their own profile and password.
+  \textbf{Admin:} views, adds, updates, deletes, locks/unlocks accounts and updates
+  passwords with administrator rights.\\
+  \hline
+  Friendships &
+  Friend requests, their status, friendships and the block list &
+  Connecting users and managing their relationships &
+  \textbf{User:} sends, accepts/declines requests, unfriends and blocks accounts.
+  \textbf{Admin:} views friend lists and friend-count statistics.\\
+  \hline
+  Conversations and messages &
+  Participants, sender, content and time of each message &
+  Chat, history, and messages read later when the recipient comes back &
+  \textbf{User:} sends, views, searches and deletes history within the allowed scope.
+  \textbf{Backend:} checks membership, stores and delivers messages.\\
+  \hline
+  Chat groups &
+  Group name, creation time, members and admin rights in the group &
+  Managing groups and group messaging &
+  \textbf{User:} creates groups and acts according to their rights.
+  \textbf{Group admin:} removes members as the rules allow.
+  \textbf{System admin:} views groups, members and group admins.\\
+  \hline
+  Spam reports &
+  Reporter, reported account, related content and time of the report &
+  Helping administrators review and act &
+  \textbf{User:} sends spam reports.
+  \textbf{Admin:} views, filters and sorts reports and locks the reported account.\\
+  \hline
+  Sign-ins and activity &
+  Sign-in history, app opens and data about chat activity &
+  Monitoring and statistics over a period &
+  \textbf{Backend:} records data from system events.
+  \textbf{Admin:} views the history, the activity list and the charts.\\
+  \hline
+\end{longtable}
+\endgroup
+
+``Actor'' means who starts or uses the function. Every PostgreSQL read or write goes
+through the backend after an authorization check; Admin and User never access the
+database directly.
+
+These data groups are the basis for the tables and relationships; a group does not
+necessarily map to one table. The detailed design defines the primary keys, foreign
+keys and constraints that prevent duplicate records and invalid references.
+
+For operations that change several related records, the team plans to use
+transactions so the changes are applied together. For example, accepting a friend
+request updates the request status and records the friendship in the same
+transaction.
+
+The backend is planned to access PostgreSQL through DAOs and JDBC. The connection
+settings are managed by the backend; the Admin Client and the User Client only
+exchange requests and results with the server over TCP sockets.
+
+The logical design below turns the data groups into the planned entities,
+attributes, keys and relationships. It is the basis for the database creation
+script in V1; connecting the applications to the data belongs to the next
+implementation stage.
+
+\input{sections/database/01-erd}
+\input{sections/database/02-data-dictionary}
+\input{sections/database/03-relationships-and-constraints}
