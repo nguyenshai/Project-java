@@ -1,0 +1,165 @@
+\paragraph{Data dictionary}
+\mbox{}\par
+
+The table below describes the attributes of the 11 entities in the ERD. For a
+composite primary key, the attributes marked PK in the same entity form one key
+together; each attribute on its own does not have to be unique. Attributes without
+a question mark in the figure are expected to have a value; fields that may be
+empty are noted in the key and nullability column.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|L{3.6cm}|L{1.8cm}|L{2.9cm}|L{\dimexpr\textwidth-8.3cm-8\tabcolsep-5\arrayrulewidth\relax}|}
+  \caption{Entities and attributes of the database design}
+  \label{tab:data-dictionary}\\
+  \hline
+  \textbf{Attribute} & \textbf{Logical type} & \textbf{Key and nullability} & \textbf{Meaning}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Attribute} & \textbf{Logical type} & \textbf{Key and nullability} & \textbf{Meaning}\\
+  \hline
+  \endhead
+  \multicolumn{4}{|l|}{\textbf{UserAccount}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Account identifier.\\
+  \hline
+  \texttt{username} & \texttt{varchar} & UK; Required & Unique username; the upper/lower case rule is decided when the database is created.\\
+  \hline
+  \texttt{passwordHash} & \texttt{varchar} & Required & Password hash; passwords are never stored as plain text.\\
+  \hline
+  \texttt{fullName} & \texttt{varchar} & Required & The user's full name.\\
+  \hline
+  \texttt{address} & \texttt{varchar} & Nullable & Address in the personal profile.\\
+  \hline
+  \texttt{birthDate} & \texttt{date} & Nullable & Date of birth, separate from activity timestamps.\\
+  \hline
+  \texttt{gender} & \texttt{varchar} & Required & Gender in the personal profile.\\
+  \hline
+  \texttt{email} & \texttt{varchar} & UK; Required & Unique email, used for contact and password reset.\\
+  \hline
+  \texttt{systemRole} & \texttt{varchar} & Required & System role: \texttt{ADMIN} or \texttt{USER}.\\
+  \hline
+  \texttt{status} & \texttt{varchar} & Required & Account status: \texttt{ACTIVE} or \texttt{LOCKED}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the account was created; used for new-registration statistics.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{FriendRequest}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Friend request identifier.\\
+  \hline
+  \texttt{senderId} & \texttt{bigint} & FK; Required & Account that sent the request, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{receiverId} & \texttt{bigint} & FK; Required & Account that received the request, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{status} & \texttt{varchar} & Required & Status \texttt{PENDING}, \texttt{ACCEPTED} or \texttt{DECLINED}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the request was sent.\\
+  \hline
+  \texttt{respondedAt} & \texttt{timestamp} & Nullable & When it was accepted or declined; empty while pending.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{Friendship}}\\*
+  \hline
+  \texttt{userId1} & \texttt{bigint} & Composite PK, FK; Required & First account; references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{userId2} & \texttt{bigint} & Composite PK, FK; Required & Second account; references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the friendship started.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{UserBlock}}\\*
+  \hline
+  \texttt{blockerId} & \texttt{bigint} & Composite PK, FK; Required & Account that blocks, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{blockedUserId} & \texttt{bigint} & Composite PK, FK; Required & Account that is blocked, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the block was created.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{Conversation}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Conversation identifier.\\
+  \hline
+  \texttt{type} & \texttt{varchar} & Required & Conversation type: \texttt{PRIVATE} or \texttt{GROUP}.\\
+  \hline
+  \texttt{groupName} & \texttt{varchar} & Nullable & Group name; not used for private conversations.\\
+  \hline
+  \texttt{creatorId} & \texttt{bigint} & FK; Required & Account that created the conversation, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{isEncrypted} & \texttt{boolean} & Required & Flag for an encrypted group; it does not replace key management data.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the conversation or group was created.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{ConversationMember}}\\*
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & Composite PK, FK; Required & Conversation joined, references \texttt{Conversation.id}.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & Composite PK, FK; Required & Participant, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{memberRole} & \texttt{varchar} & Required & Role in the conversation: \texttt{ADMIN} or \texttt{MEMBER}; separate from the system role.\\
+  \hline
+  \texttt{joinedAt} & \texttt{timestamp} & Required & When the member joined the conversation.\\
+  \hline
+  \texttt{leftAt} & \texttt{timestamp} & Nullable & When the member left or was removed from the group; empty while still a member.\\
+  \hline
+  \texttt{historyClearedAt} & \texttt{timestamp} & Nullable & Point before which the whole history is hidden for this member, since clearing history affects only that person.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{Message}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Message identifier.\\
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & FK; Required & Conversation of the message, references \texttt{Conversation.id}; also part of the sender's composite foreign key.\\
+  \hline
+  \texttt{senderId} & \texttt{bigint} & FK; Required & Sender; with \texttt{conversationId} it references the key of \texttt{ConversationMember}.\\
+  \hline
+  \texttt{content} & \texttt{text} & Required & Message content. How encrypted content is stored still needs to be designed.\\
+  \hline
+  \texttt{sentAt} & \texttt{timestamp} & Required & When the message was sent; used to order the history and filter by time.\\
+  \hline
+  \texttt{deliveredAt} & \texttt{timestamp} & Nullable & When a private message reached its recipient: equal to
+  \texttt{sentAt} if the recipient was online, or the time they next signed in if it had to wait; empty while waiting
+  and for group messages.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{HiddenMessage}}\\*
+  \hline
+  \texttt{userId} & \texttt{bigint} & Composite PK, FK; Required & User who hid the message, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{messageId} & \texttt{bigint} & Composite PK, FK; Required & Hidden message, references \texttt{Message.id}.\\
+  \hline
+  \texttt{hiddenAt} & \texttt{timestamp} & Required & When the user hid the message from their history.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{SpamReport}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Spam report identifier.\\
+  \hline
+  \texttt{reporterId} & \texttt{bigint} & FK; Required & Reporting account, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{reportedUserId} & \texttt{bigint} & FK; Required & Reported account, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{messageId} & \texttt{bigint} & FK; Required & Related message, references \texttt{Message.id}.\\
+  \hline
+  \texttt{reason} & \texttt{text} & Required & Reason or description of the report.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the report was sent; used for filtering and sorting.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{LoginHistory}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Sign-in identifier.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & FK; Required & Account that signed in, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{loggedInAt} & \texttt{timestamp} & Required & Time of the successful sign-in.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{AppOpenEvent}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & App-open identifier.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & FK; Required & Account whose activity is recorded, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{openedAt} & \texttt{timestamp} & Required & When the app was opened; used for app-open and active-user statistics.\\
+  \hline
+\end{longtable}
+\endgroup
+
+Timestamps used for sorting and statistics must be stored and interpreted in one
+consistent time zone when the script and the JDBC connection are created. Usernames,
+emails, account status and request status also need consistent value conventions.

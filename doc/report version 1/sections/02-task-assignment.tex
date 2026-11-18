@@ -1,0 +1,198 @@
+\section{Task assignment}
+
+\subsection{Task plan}
+\label{subsec:task-plan}
+
+The plan below details what each member is responsible for in Version 1. It
+covers requirement analysis, interface design, database design and preparing the
+submission. It is the planned assignment, not a record of finished work.
+
+Codes \texttt{F01}, \texttt{F02}, \ldots\ identify functions; codes \texttt{T01},
+\texttt{T02}, \ldots\ identify tasks. The subsystem of each function is shown in
+the function lists in Section~\ref{subsubsec:client-user} and
+Section~\ref{subsubsec:client-admin}, not in the code itself.
+Each code stays the same when a table is renamed or reordered.
+
+A task can relate to several functions, and a function can be checked against
+several tasks. In V1 this link shows the scope of design and review; it does not
+mean the function is already implemented.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|C{1cm}|L{\dimexpr\textwidth-6.6cm-8\tabcolsep-5\arrayrulewidth\relax}|L{3.2cm}|C{2.4cm}|}
+  \caption{Task plan for Version 1}
+  \label{tab:task-plan}\\
+  \hline
+  \textbf{Code} & \textbf{Task} & \textbf{Owner} &
+  \textbf{Related functions}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Code} & \textbf{Task} & \textbf{Owner} &
+  \textbf{Related functions}\\
+  \hline
+  \endhead
+  \hypertarget{T01}{\texttt{T01}} &
+    Analyse the assignment; define the scope and requirements of Version 1.
+    & Both members & \hyperlink{F01}{F01}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T02}{\texttt{T02}} &
+    Design the administrator subsystem interface: forms, lists, filter and
+      sort controls, statistics and charts required by the assignment.
+    & Châu Vũ Trung & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T03}{\texttt{T03}} &
+    Design the user subsystem interface: account, friends, finding people,
+      private chat, group chat and the related actions.
+    & Nguyễn Sơn Hải & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
+  \hline
+  \hypertarget{T04}{\texttt{T04}} &
+    Design the database and prepare the PostgreSQL database creation script.
+    & Both members & \hyperlink{F01}{F01}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T05}{\texttt{T05}} &
+    Check the screens and the database design against the assignment and
+      record what must be added or changed.
+    & Both members & \hyperlink{F01}{F01}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T06}{\texttt{T06}} &
+    Prepare the report content and screenshots of the administrator subsystem.
+    & Châu Vũ Trung & \hyperlink{F13}{F13}--\hyperlink{F21}{F21}\\
+  \hline
+  \hypertarget{T07}{\texttt{T07}} &
+    Prepare the report content and screenshots of the user subsystem.
+    & Nguyễn Sơn Hải & \hyperlink{F01}{F01}--\hyperlink{F12}{F12}\\
+  \hline
+  \hypertarget{T08}{\texttt{T08}} &
+    Assemble the report, keep its presentation consistent and organise the V1 submission.
+    & Châu Vũ Trung & Shared work\\
+  \hline
+  \hypertarget{T09}{\texttt{T09}} &
+    Commit one's own work and provide personal commit screenshots
+      for the submission.
+    & Each member & Shared work\\
+  \hline
+\end{longtable}
+\endgroup
+
+A code range such as \hyperlink{F01}{F01}--\hyperlink{F12}{F12} covers every
+function from F01 to F12; each end links to the matching function row.
+Shared tasks about assembling and managing the work are not forced onto a
+specific function.
+
+\noindent\textbf{Acceptance rule:}
+A task is recorded as done only after both members have checked it and
+agreed to accept it.
+
+The assignment can change with the actual workload once both members agree.
+The results are recorded in Section~\ref{subsec:task-results} and are the basis
+for each member's contribution.
+
+\clearpage
+\subsection{Results}
+\label{subsec:task-results}
+
+The table below records the work actually done, with its product and evidence.
+Technical check dates and dates taken from commits are marked in the table.
+The completion date is the joint acceptance date confirmed by both members.
+
+The task code column reuses codes \hyperlink{T01}{T01}--\hyperlink{T09}{T09}
+from Section~\ref{subsec:task-plan}; no new numbers are given by recording order.
+A task can have several result rows if it was done in several rounds; the related
+functions follow from the task code.
+
+Completion dates use the format \textit{dd/mm/yyyy} and are the day both members
+checked and accepted the work. Without a confirmed date, the date taken from the
+commit is noted in the table. The evidence is a link to the product or the
+matching commit: source code and the SQL script link to
+\href{https://github.com/nguyenshai/Project-java}{the team's GitHub};
+documents, images and the report link to
+\href{https://drive.google.com/drive/folders/1Kci4Ug_HXLRbBBFc0h6lVz0RbuvbcJTF?usp=sharing}
+{the team's Google Drive}.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{Task results}
+\label{tab:task-results}
+\begin{tabularx}{\textwidth}{|C{1.4cm}|L{2.2cm}|Y|L{2.1cm}|L{2.5cm}|L{2cm}|}
+  \hline
+  \textbf{Task code} & \textbf{Done by} & \textbf{Work done} &
+  \textbf{Completed} & \textbf{Result / product} & \textbf{Evidence}\\
+  \hline
+  \hyperlink{T08}{\texttt{T08}} & Châu Vũ Trung &
+    Set up the structure and draft of the V1 report in LaTeX. &
+    05/11/2026 (commit) & V1 report source &
+    \href{https://github.com/nguyenshai/Project-java/commit/97c5565ffd339990c2cdc7d8f282d2d1a080a7d6}{\texttt{97c5565}} \\
+  \hline
+  \hyperlink{T08}{\texttt{T08}} & Châu Vũ Trung &
+    Set up the Maven Wrapper and the four-module Java project structure. &
+    05/11/2026 (commit) & Maven project skeleton &
+    \href{https://github.com/nguyenshai/Project-java/commit/97c5565ffd339990c2cdc7d8f282d2d1a080a7d6}{\texttt{97c5565}} \\
+  \hline
+  \hyperlink{T02}{\texttt{T02}} & Châu Vũ Trung &
+    Figma design and Java Swing administrator interface for F13--F21. &
+    11/11/2026 (check) & Admin prototype and source code &
+    \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU/ChatApp-Admin?node-id=2-80}{Figma};
+    \href{https://github.com/nguyenshai/Project-java/tree/trung/src/admin-client}{source code} \\
+  \hline
+  \hyperlink{T06}{\texttt{T06}} & Châu Vũ Trung &
+    Write the Admin section, map F13--F21 and render screenshots from the Swing app. &
+    11/11/2026 (check) & Admin content and screenshots &
+    Section~\ref{subsubsec:client-admin}, Figure~\ref{fig:admin-swing-users-history} \\
+  \hline
+  \hyperlink{T03}{\texttt{T03}} & Nguyễn Sơn Hải &
+    Build the Java Swing user interface for F01--F12 from the Figma design,
+    with sample data and automated tests. &
+    18/11/2026 (check) & User prototype and source code &
+    \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=129-930}{Figma};
+    \href{https://github.com/nguyenshai/Project-java/tree/main/src/user-client}{source code} \\
+  \hline
+  \hyperlink{T07}{\texttt{T07}} & Nguyễn Sơn Hải &
+    Write the User section, map F01--F12 and capture screenshots from the Swing app. &
+    18/11/2026 (check) & User content and screenshots &
+    Section~\ref{subsubsec:client-user}, Figure~\ref{fig:user-swing-chat} \\
+  \hline
+  \rule{0pt}{1.15cm} & & & & & \\
+  \hline
+\end{tabularx}
+\end{center}
+
+\clearpage
+\subsection{Member contributions}
+\label{subsec:contributions}
+
+Contribution percentages are based on the actual workload, how complete and how
+good the work is, and participation in shared tasks. Both members agree on the
+content and the percentages before submitting the report, and the total is 100\%.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{Member contributions}
+\label{tab:contributions}
+\begin{tabularx}{\textwidth}{|C{0.7cm}|L{3cm}|C{2.1cm}|Y|C{2cm}|}
+  \hline
+  \textbf{No.} & \textbf{Full name} & \textbf{Student ID} &
+  \textbf{Actual contribution} & \textbf{Share}\\
+  \hline
+  \rule{0pt}{1.1cm}1 & Nguyễn Sơn Hải & 24127163 &
+  Built and tested the user interface F01--F12 from the Figma design, with sample
+  data and automated tests; wrote the User section and prepared its screenshots;
+  co-designed the database. & 50\% \\
+  \hline
+  \rule{0pt}{1.1cm}2 & Châu Vũ Trung & 24127256 &
+  Set up the Maven skeleton and the report draft; designed, built and tested the Admin
+  interface F13--F21; unified the sample data of both subsystems; wrote the Admin section,
+  prepared its screenshots and assembled the V1 report; co-designed the database. & 50\% \\
+  \hline
+  \multicolumn{4}{|r|}{\textbf{Total}} & \textbf{100\%}\\
+  \hline
+\end{tabularx}
+\end{center}
+
+Both members agreed on the content and percentages above when V1 was completed.
+The evidence is checked against the results in Section~\ref{subsec:task-results},
+the commit history on GitHub and the documents on Google Drive; the number of
+commits is not the only criterion.

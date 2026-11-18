@@ -1,76 +1,88 @@
-# Hệ thống chat — RushDL - 13
+# Chat System — RushDL - 13
 
-Đồ án Lập trình ứng dụng Java, lớp 24KTPM2.
+Final project for "Java Application Programming", class 24KTPM2.
 
-- Nguyễn Sơn Hải — 24127163
-- Châu Vũ Trung — 24127256
+- Nguyễn Sơn Hải — 24127163 (User subsystem)
+- Châu Vũ Trung — 24127256 (Admin subsystem)
 
-## Phạm vi hiện tại
+## Current status (Version 1)
 
-Đã tạo khung Maven và chuyển báo cáo sang `doc/report version 1/`.
-Các package đang để trống, được giữ bằng `.gitkeep`. Chưa có lớp main, màn hình,
-nghiệp vụ, TCP listener hoặc kết nối cơ sở dữ liệu; các JAR tạo ra chưa chạy được.
-JUnit đã được cấu hình nhưng chưa có bài kiểm thử. Mockito chưa được thêm.
+- **Admin client:** complete V1 Swing prototype. It has an Admin Login page and every admin screen (F13–F21),
+  driven by in-memory preview data and covered by `AdminUiTest`. See [`doc/ADMIN_UI.md`](doc/ADMIN_UI.md).
+- **User client:** complete V1 Swing prototype. It has the pre-login flow (Login, Register, Forgot password) and
+  the Chat, Group, Friend and Account pages (F01–F12), driven by an in-memory `PreviewServer` and covered by
+  `UserUiTest`. Sign in as `mayachen` / `chatapp123`. See [`doc/USER_UI.md`](doc/USER_UI.md).
+- **Server, common:** empty package skeletons. There is no server main class yet.
+- **Database script:** placeholder (`script/create_database.sql`). The ERD is in the report.
 
-Version 1 tập trung thiết kế giao diện và cơ sở dữ liệu. Khung server và network
-được chuẩn bị cho giai đoạn triển khai sau, không phải minh chứng đã hoàn thành chức năng.
+V1 focuses on UI and database design. The plan and remaining work are in [`doc/UI_PLAN.md`](doc/UI_PLAN.md).
+User UI reference: [`doc/USER_UI.md`](doc/USER_UI.md).
+Contributor and agent guide: [`doc/AGENT.md`](doc/AGENT.md).
 
-## Cấu trúc
+## Layout
 
 ```text
 Project/
-├── pom.xml                       # Maven cha: phiên bản thư viện và các module
-├── mvnw / mvnw.cmd                # Chạy Maven bằng wrapper
+├── pom.xml                       # Parent Maven build: versions and modules
+├── mvnw / mvnw.cmd               # Maven wrapper
 ├── src/
-│   ├── common/                    # DTO và enum dùng chung
-│   ├── user-client/               # Giao diện Swing cho người sử dụng
-│   ├── admin-client/              # Giao diện Swing cho quản trị viên
-│   └── server/                    # Spring Boot, nghiệp vụ, JDBC và TCP
-├── script/create_database.sql     # File chờ triển khai SQL
+│   ├── common/                   # Shared DTOs and enums
+│   ├── user-client/              # Swing app for users
+│   ├── admin-client/             # Swing app for administrators
+│   └── server/                   # Spring Boot (no web), services, JDBC, TCP
+├── script/create_database.sql    # PostgreSQL creation script
 ├── doc/
-│   ├── Final Project.pdf          # Đề bài
-│   └── report version 1/          # Báo cáo LaTeX, ảnh và sơ đồ gốc
-└── git/                           # Minh chứng commit thực tế khi có
+│   ├── Final Project.pdf         # Assignment spec
+│   ├── ADMIN_UI.md, UI_PLAN.md, USER_UI.md, AGENT.md
+│   └── report version 1/         # LaTeX report (English), images and diagrams
+└── git/                          # Commit screenshots for submission
 ```
 
-Trong mỗi module, mã Java nằm ở `src/main/java`, tài nguyên nằm ở
-`src/main/resources`, bài kiểm thử nằm ở `src/test/java` theo quy ước Maven.
-Thư mục `src/` bên ngoài chỉ gom các module để thuận tiện chuẩn bị hồ sơ đồ án.
+Each module uses the standard Maven layout (`src/main/java`, `src/main/resources`, `src/test/java`).
 
-| Module | Package gốc | Thư mục con và trách nhiệm |
+| Module | Root package | Packages |
 | --- | --- | --- |
-| common | `chatapp.common` | `dto`: dữ liệu trao đổi; `enums`: các giá trị dùng chung |
-| user-client | `chatapp.user` | `ui`: màn hình Swing; `network`: gửi/nhận qua TCP |
-| admin-client | `chatapp.admin` | `ui`: màn hình Swing; `network`: gửi/nhận qua TCP |
-| server | `chatapp.server` | `model`: dữ liệu nghiệp vụ; `service`: xử lý nghiệp vụ; `dao`: truy vấn JDBC; `network`: nhận/gửi TCP; `config`: cấu hình |
+| common | `chatapp.common` | `dto`, `enums` |
+| user-client | `chatapp.user` | `ui`, `network`, `preview` |
+| admin-client | `chatapp.admin` | `ui`, `network` |
+| server | `chatapp.server` | `model`, `service`, `dao`, `network`, `config` |
 
-Ba module ứng dụng cùng phụ thuộc `common`. Hai client không phụ thuộc server
-và không kết nối trực tiếp PostgreSQL. Quyền Admin/User phải được kiểm tra ở server
-khi triển khai; việc tách hai giao diện không tự tạo ra cơ chế phân quyền.
+All three apps depend only on `common`. The clients never depend on the server and never connect to
+PostgreSQL. Admin/User authorization is enforced on the server. Two separate client apps are not a
+security boundary.
 
-## Công nghệ
+## Technology
 
-Java 21, Java Swing (có sẵn trong JDK), Spring Boot 3.5.16, socket TCP Java,
-PostgreSQL JDBC Driver 42.7.14, Maven 3.9.11 và JUnit Jupiter 5.13.4.
-Server dùng Spring Boot starter cơ bản, không thêm web starter hoặc WebSocket.
-DAO sẽ dùng JDBC trực tiếp; chưa thêm JPA hoặc ORM.
+Java 21, Swing, Spring Boot 3.5.16 (basic starter, no web or WebSocket), Java TCP sockets,
+PostgreSQL JDBC driver 42.7.14 (server only), Maven 3.9.11, JUnit Jupiter 5.13.4.
+Library versions are managed in the root `pom.xml`. DAOs use JDBC directly (no JPA/ORM).
 
-Các phiên bản thư viện được đặt tại `pom.xml` gốc để dễ quản lý.
-Chỉ server có driver PostgreSQL. Chưa cần cài PostgreSQL để kiểm tra khung dự án.
+## Build and run
 
-## Mở và kiểm tra dự án
-
-1. Cài JDK 21 trở lên, ưu tiên JDK 21 cho dự án này; cấu hình `JAVA_HOME`.
-2. Mở `pom.xml` ở thư mục gốc bằng IDE và import dưới dạng Maven project.
-3. Trong PowerShell tại thư mục gốc, chạy:
+1. Install JDK 21 and set `JAVA_HOME`.
+2. Import the root `pom.xml` as a Maven project.
+3. From the repo root (PowerShell):
 
 ```powershell
-.\mvnw.cmd verify
+.\mvnw.cmd verify                                        # build and test all modules
+java -cp "src/admin-client/target/classes;src/common/target/classes" chatapp.admin.AdminApp
+java -cp "src/user-client/target/classes;src/common/target/classes" chatapp.user.UserApp
 ```
 
-Lần đầu cần Internet để tải Maven và thư viện. Lệnh này kiểm tra cấu hình/build;
-khi chưa có bài test, thông báo `No tests to run` là đúng trạng thái hiện tại.
-Không chạy `spring-boot:run` ở giai đoạn này vì chưa có lớp khởi động server.
+The first build needs Internet access to download Maven and the libraries. Do not run `spring-boot:run`:
+the server has no startup class yet.
 
-Để sửa báo cáo, mở `doc/report version 1/main.tex`; giữ nguyên các thư mục
-`config`, `cover`, `sections`, `images` bên cạnh để các lệnh `\input` và ảnh hoạt động.
+## Sample accounts (Version 1 preview)
+
+Both apps run on the same in-memory sample data, and changes last until the window closes.
+
+| App | Sign in with | Notes |
+| --- | --- | --- |
+| User (`UserApp`) | `mayachen` / `chatapp123` | Maya Chen. Every sample account uses the password `chatapp123`, e.g. `noahp`, `avab`, `ethanp`. |
+| User (`UserApp`) | `linhng`, `owentran`, `ryanh` | Locked by an administrator: sign-in shows the lock error. |
+| Admin (`AdminApp`) | any non-empty username and password, e.g. `admin` / `admin` | V1 only checks that both fields are filled; the server checks the ADMIN role in V2. |
+
+V1 keeps passwords as plain text in the preview data. The database design stores only password hashes.
+
+To edit the report, open `doc/report version 1/main.tex`. Keep the `config`, `cover`, `sections` and
+`images` folders next to it so `\input` and image paths resolve.

@@ -1,0 +1,143 @@
+\paragraph{Main relationships}
+\mbox{}\par
+
+An account can send or receive many friend requests, appear in many friendships
+and blocks, and take part in many conversations. Where a relationship has two
+roles, two attributes reference \texttt{UserAccount.id} with different meanings,
+for example the sender and the receiver of a friend request.
+
+\begin{itemize}
+  \item \textbf{Accounts and friendships:}
+    \texttt{FriendRequest.senderId} and \texttt{receiverId},
+    the two attributes of the \texttt{Friendship} primary key,
+    and \texttt{UserBlock.blockerId} and \texttt{blockedUserId}
+    all reference the matching account.
+  \item \textbf{Accounts and conversations:}
+    \texttt{Conversation.creatorId} references the creator.
+    The many-to-many relationship between accounts and conversations is
+    resolved through \texttt{ConversationMember}, whose composite primary key is
+    \texttt{(conversationId, userId)}.
+  \item \textbf{Conversations and messages:}
+    every message belongs to one conversation. The pair
+    \texttt{(conversationId, senderId)} in \texttt{Message}
+    references the primary key of \texttt{ConversationMember}, which ensures
+    the sender has a membership record in that conversation.
+    Whether the sender is still a member when sending is checked by the backend.
+  \item \textbf{Messages and personal history:}
+    \texttt{HiddenMessage} links a user to a message.
+    The composite primary key \texttt{(userId, messageId)} prevents recording
+    the same hidden message twice for that user.
+  \item \textbf{Messages and spam reports:}
+    \texttt{SpamReport} references the reporter, the reported account
+    and the related message; a message can appear in several reports.
+  \item \textbf{Accounts and activity:}
+    each \texttt{LoginHistory} or \texttt{AppOpenEvent} record
+    belongs to one account; an account can have many records over time.
+\end{itemize}
+
+\paragraph{Planned constraints and data rules}
+\mbox{}\par
+
+Primary keys, foreign keys and unique constraints are planned in the database.
+Rules about access rights, membership status or changing several records at once
+are also checked by the backend; the keys in the ERD alone are not enough for
+the whole business logic.
+
+\begin{enumerate}
+  \item \textbf{Accounts:} the username and email are unique;
+    passwords are stored only as hashes. \texttt{systemRole} separates
+    system Admins from Users; \texttt{status} separates active accounts
+    from locked ones.
+  \item \textbf{Friends and blocks:} the two people in a relationship must differ.
+    \texttt{Friendship} stores the ID pair with the convention
+    \texttt{userId1 < userId2}, combined with the composite primary key so both
+    directions of the same relationship are never stored. A block is directed:
+    A blocking B does not mean B blocks A.
+  \item \textbf{Conversations and members:} \texttt{type} is
+    \texttt{PRIVATE} or \texttt{GROUP}; the group name is used for group conversations.
+    A private conversation has two participants; creating a group needs the creator
+    and at least one other user. The composite primary key of a member prevents
+    the same person from appearing twice in a conversation.
+  \item \textbf{Group rights:} \texttt{memberRole} is
+    \texttt{ADMIN} or \texttt{MEMBER}, independent of system administrator rights.
+    Only group admins can remove members, as the assignment requires. On removal the
+    backend sets \texttt{leftAt} instead of deleting the \texttt{ConversationMember}
+    row, so the composite foreign key of \texttt{Message} stays valid and the person's
+    earlier messages remain; when that person is added again, the same row is reused
+    and \texttt{leftAt} is cleared.
+    When a message is sent, the backend checks the current membership and rights.
+  \item \textbf{Locked accounts:} when \texttt{UserAccount.status} is \texttt{LOCKED},
+    nobody can message the account privately, send it or accept its friend requests,
+    block it, add it to a group or make it a group admin; others can only unfriend it,
+    decline its friend requests and, as group admins, remove it from a group.
+  \item \textbf{Message status:} the \textbf{Sent}, \textbf{Waiting} and
+    \textbf{Delivered} status of a private message is derived from
+    \texttt{Message.deliveredAt}, with no extra status column; group messages only
+    show \textbf{Sent}.
+  \item \textbf{Spam reports:} the reporter must be allowed to see the related
+    content; the reported message must belong to the reported account.
+    The backend checks these conditions on top of the foreign keys.
+  \item \textbf{Consistency:} accepting a friend request updates the request and
+    creates the friendship in the same transaction. Blocking and unfriending also
+    apply their related changes together to avoid contradictory states.
+\end{enumerate}
+
+\paragraph{Clearing history and group encryption}
+\mbox{}\par
+
+The proposed design treats clearing history as removing it for the person who does
+it. \texttt{HiddenMessage} records each hidden message;
+\texttt{ConversationMember.historyClearedAt} marks the point before which the whole
+history is cleared for that member. When messages are read, hidden messages and
+messages before that point are not shown to that person; other participants keep
+their history. The team confirms this interpretation when the design is finalised.
+
+The \texttt{Conversation.isEncrypted} attribute only records whether a group is
+encrypted. The current ERD does not yet describe key management, key changes or
+the format of encrypted content; this must be completed before the data design
+can be said to fully support group encryption. Likewise, the policy for keeping or
+handling related data when an account is deleted must be decided before the
+foreign key behaviour in the script is final.
+
+\paragraph{Data for statistics}
+\mbox{}\par
+
+The model has no separate statistics tables when the figures can be computed from
+the source data. The Admin functions map as follows:
+
+\begin{itemize}
+  \item \hyperlink{F14}{F14}: reads sign-ins from
+    \texttt{LoginHistory}, joins the account profile and sorts by time.
+  \item \hyperlink{F17}{F17}--\hyperlink{F18}{F18}: filters
+    \texttt{UserAccount.createdAt} by the selected year; counts new accounts
+    per month of that year.
+  \item \hyperlink{F19}{F19}: counts relationships in \texttt{Friendship};
+    \textbf{Total network} is the union of direct friends and friends of friends,
+    excluding the account itself and counting each account once.
+    \textbf{Friends of friends only} also excludes direct friends; a mutual friend
+    is found through two consecutive friendships.
+  \item \hyperlink{F20}{F20}: counts app opens from
+    \texttt{AppOpenEvent}; checks messages, conversations and members to find
+    how many people and groups were chatted with in the selected year.
+  \item \hyperlink{F21}{F21}: counts distinct accounts that opened the app in
+    each month, not the total number of opens.
+\end{itemize}
+
+Sign-in history and app opens are kept apart because reopening the app is not
+necessarily a new sign-in. Online/offline status will be determined by the backend
+from live connections; an old sign-in record does not prove a user is online.
+
+The \textbf{Period} picker applies one calendar year to tables and charts.
+A yearly query covers the start of the year up to the start of the next year in the
+system's time zone. Charts always show 12 months; the yearly total of
+\textbf{Active users} counts each account once, even when it was active in several
+months.
+
+\paragraph{Data for administration extensions}
+\mbox{}\par
+The current ERD supports the \texttt{ACTIVE}/\texttt{LOCKED} status and spam reports.
+The lock/unlock log in the prototype is an extension that needs the time, the
+affected account and the administrator who acted. The group activity log can take
+message times and join/leave times from the existing tables. To tell leaving apart
+from being removed, or to record renames and role changes, event records must be
+added before those items are implemented.

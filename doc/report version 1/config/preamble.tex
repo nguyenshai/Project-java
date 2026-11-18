@@ -1,7 +1,7 @@
-% Tiếng Việt; tương thích pdfLaTeX và trình biên dịch LaTeX trong Codex.
+% English text; T5 font encoding keeps the Vietnamese names (e.g. Nguyễn Sơn Hải) typeset correctly in pdfLaTeX.
 \usepackage[T5]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[vietnamese]{babel}
+\usepackage[english]{babel}
 \usepackage[a4paper,left=2.5cm,right=2cm,top=2.5cm,bottom=2.3cm]{geometry}
 \usepackage{graphicx}
 \usepackage{pdflscape}
@@ -19,8 +19,8 @@
   colorlinks=true,
   linkcolor=black,
   urlcolor=blue!60!black,
-  pdftitle={Báo cáo Version 1 Hệ thống chat},
-  pdfauthor={Nguyễn Sơn Hải và Châu Vũ Trung}
+  pdftitle={Chat System Version 1 Report},
+  pdfauthor={Nguyễn Sơn Hải and Châu Vũ Trung}
 }
 \urlstyle{same}
 \setstretch{1.25}
@@ -35,6 +35,6 @@
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
-% Đánh số hình và bảng theo mục lớn: Hình 3.1, Bảng 3.1.
+% Number figures and tables by section: Figure 3.1, Table 3.1.
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
