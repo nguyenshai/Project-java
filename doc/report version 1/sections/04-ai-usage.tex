@@ -1,0 +1,97 @@
+\section{AI usage declaration}
+\label{sec:ai-usage}
+
+The team used AI tools as assistants in Version 1. The assignment sets no policy
+on AI use~\cite{ref:assignment}; the team declares it here so the grader can see
+which parts were assisted and how they were checked. Every result in this report
+and in the submission was reviewed, tested and accepted by the members, who are
+responsible for it and can explain it.
+
+\subsection{Tools used}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{AI tools used in Version 1}
+\label{tab:ai-tools}
+\begin{tabularx}{\textwidth}{|L{3.4cm}|L{3cm}|Y|}
+  \hline
+  \textbf{Tool} & \textbf{Used by} & \textbf{Main use}\\
+  \hline
+  Claude Code~\cite{ref:claude-code} &
+  Châu Vũ Trung &
+  Reviewing and editing code, writing tests, drafting the database script and
+  sample data, and editing the report and project documents.\\
+  \hline
+  GitHub Copilot~\cite{ref:copilot} &
+  Nguyễn Sơn Hải &
+  Code completion and small code edits in the User interface.\\
+  \hline
+  Claude~\cite{ref:claude-code} &
+  Nguyễn Sơn Hải &
+  Reviewing the User interface against the assignment and discussing design ideas.\\
+  \hline
+\end{tabularx}
+\end{center}
+
+\subsection{What the AI assisted with}
+
+The table below follows the task codes in Section~\ref{subsec:task-plan}.
+The right-hand column lists the decisions and checks that stayed with the members.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{AI assistance by task}
+\label{tab:ai-by-task}
+\begin{tabularx}{\textwidth}{|C{1.4cm}|Y|Y|}
+  \hline
+  \textbf{Task} & \textbf{AI assisted with} & \textbf{Done or decided by the members}\\
+  \hline
+  \hyperlink{T02}{T02}, \hyperlink{T06}{T06} &
+  Reviewing the Swing code of the Admin interface, suggesting fixes, writing
+  automated UI tests and improving the wording of the Admin section. &
+  Screen layout and flows in Figma, the choice of features for F13--F21,
+  accepting or rejecting each suggestion, and the screenshots.\\
+  \hline
+  \hyperlink{T03}{T03}, \hyperlink{T07}{T07} &
+  Copilot completed and edited code while the User interface was built;
+  Claude reviewed the screens against F01--F12 and suggested ideas for flows
+  and edge cases. &
+  Screen design in Figma, the final user flows, which suggestions to keep,
+  testing in the running application, and the User section.\\
+  \hline
+  \hyperlink{T04}{T04} &
+  Drafting changes to the ERD and data dictionary, the PostgreSQL creation
+  script, the simulated sample data and the queries that check it. &
+  The design decisions: end-to-end group encryption, soft deletion of
+  accounts, \texttt{GroupEvent} and \texttt{AccountLockLog}; running and
+  checking the scripts on PostgreSQL 17.\\
+  \hline
+  \hyperlink{T08}{T08} &
+  Checking the report for consistency and clear English, and keeping the
+  project documents (README, \texttt{doc/}) in line with the code. &
+  The structure and content of the report, the contribution shares and the
+  final review before submission.\\
+  \hline
+\end{tabularx}
+\end{center}
+
+AI was not used to choose the scope of Version 1, to set the contribution
+percentages, or to accept a task. The commit-history screenshots are taken by
+each member from the real Git history.
+
+\subsection{How AI output was checked}
+
+\begin{itemize}
+  \item \textbf{Code:} every change is compiled and checked with the automated
+    tests (\texttt{mvnw verify}) and by running both Swing applications.
+  \item \textbf{Database:} the creation script and the sample data are run twice
+    on a clean PostgreSQL 17 database; deliberately invalid inserts must be
+    rejected, and the sample encrypted messages and password hashes are verified.
+  \item \textbf{Report:} each section is checked against the assignment and
+    against the running applications, and every figure is a real screenshot.
+  \item \textbf{Acceptance:} as for all work, a task assisted by AI is recorded
+    as done only after both members have reviewed and accepted it
+    (Section~\ref{subsec:task-results}).
+\end{itemize}

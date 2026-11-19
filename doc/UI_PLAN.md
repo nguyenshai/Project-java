@@ -7,8 +7,8 @@ Pending rows show **proposed** target dates. Adjust them to the real V1 deadline
 Owners: **Châu Vũ Trung** = Admin subsystem (F13–F21) and report assembly.
 **Nguyễn Sơn Hải** = User subsystem (F01–F12).
 
-> **Blocking rule from the spec:** a member with no commits gets 0 points. Today every commit is by Trung.
-> The User UI work (T03, T07) is done but uncommitted. Hải will commit it under his own git identity.
+> **Blocking rule from the spec:** a member with no commits gets 0 points. Both members now have commits
+> (Hải: `830c8ab`, User UI). Each member still saves their own commit screenshots to `git/` (T09).
 
 ## Timeline
 
@@ -18,17 +18,17 @@ Owners: **Châu Vũ Trung** = Admin subsystem (F13–F21) and report assembly.
 | 05/11/2026 | T08 | Trung | Maven multi-module scaffold and LaTeX report draft | — | Done (`97c5565`) |
 | 11/11/2026 | T02 | Trung | Figma design and Swing Admin UI for all admin screens | F13–F21 | Done (`865bd92`, `4ec453b`) |
 | 11/11/2026 | T06 | Trung | Admin report section, screen table, screenshots | F13–F21 | Done (`865bd92`, `4ec453b`) |
-| 16/11/2026 | T02 | Trung | Admin Login page; "Admin" identity; group ids; screenshots re-captured | F13, F15 | Done (uncommitted) |
+| 16/11/2026 | T02 | Trung | Admin Login page; "Admin" identity; group ids; screenshots re-captured | F13, F15 | Done (`f16a7bc`) |
 | 16/11/2026 | T05 | Both | First cross-check of screens and report vs. spec (findings below) | F01–F21 | Done |
-| 16/11/2026 | T06 | Trung | Report: role table fixed, Admin Login added, yearly period stated; `doc/ADMIN_UI.md` | F13–F21 | Done (uncommitted) |
-| 16/11/2026 | T03 | Hải | User UI per [`USER_UI.md`](USER_UI.md): pre-login flow + Chat, Group, Friend, Account pages; `PreviewServer`; `UserUiTest` + `SearchResultsTest` (21 tests) | F01–F12 | Done (uncommitted; Hải to commit) |
-| 16/11/2026 | T07 | Hải | User report section: navigation, screen table, 14 `user-swing-*.png` screenshots; results and contribution rows | F01–F12 | Done (uncommitted; Hải to commit) |
-| 18/11/2026 | T02 | Trung | Admin and User sample data unified (Admin is the base: 14 accounts, locks, groups, messages, spam reports); Admin screenshots re-captured | F13–F21 | Done (uncommitted) |
-| 18/11/2026 | T03 | Hải | Review fixes: Improve refused in encrypted groups; Sent / Waiting / Delivered from `deliveredAt`; blocked and locked chats closed; locked accounts flagged with no actions except Unfriend / Decline / Remove; removal by `leftAt`; tests (25) | F06–F12 | Done (uncommitted; Hải to commit) |
-| 18/11/2026 | T07 | Both | Report: Sign in naming, sample accounts, `Message.deliveredAt` in the ERD and data dictionary, locked and `leftAt` rules, 50/50 contribution, T03 link; User screenshots re-captured (+ `chat-locked`) | F01–F21 | Done (uncommitted) |
-| 17/11–20/11 | T04 | Both | `script/create_database.sql` from the 11-entity ERD (+ decide on lock log / group events) | F01–F21 | To do |
+| 16/11/2026 | T06 | Trung | Report: role table fixed, Admin Login added, yearly period stated; `doc/ADMIN_UI.md` | F13–F21 | Done (`f16a7bc`) |
+| 16/11/2026 | T03 | Hải | User UI per [`USER_UI.md`](USER_UI.md): pre-login flow + Chat, Group, Friend, Account pages; `PreviewServer`; `UserUiTest` + `SearchResultsTest` (21 tests) | F01–F12 | Done (`830c8ab`) |
+| 16/11/2026 | T07 | Hải | User report section: navigation, screen table, 14 `user-swing-*.png` screenshots; results and contribution rows | F01–F12 | Done (`830c8ab`) |
+| 18/11/2026 | T02 | Trung | Admin and User sample data unified (Admin is the base: 14 accounts, locks, groups, messages, spam reports); Admin screenshots re-captured | F13–F21 | Done (`f16a7bc`) |
+| 18/11/2026 | T03 | Hải | Review fixes: Improve refused in encrypted groups; Sent / Waiting / Delivered from `deliveredAt`; blocked and locked chats closed; locked accounts flagged with no actions except Unfriend / Decline / Remove; removal by `leftAt`; tests (25) | F06–F12 | Done (`830c8ab`) |
+| 18/11/2026 | T07 | Both | Report: Sign in naming, sample accounts, `Message.deliveredAt` in the ERD and data dictionary, locked and `leftAt` rules, 50/50 contribution, T03 link; User screenshots re-captured (+ `chat-locked`) | F01–F21 | Done (`50eaea3`, `830c8ab`) |
+| 19/11/2026 | T04 | Trung | ERD decisions: keep Activity/Monitoring (`GroupEvent`), keep lock history (`AccountLockLog`), end-to-end group encryption (`UserKey`, `GroupKey`, `GroupKeyShare`, `Message.keyVersion`, `SpamReport.reportedContent`); ERD, data dictionary and constraints updated | F12g, F15, F16 | Done (uncommitted) |
+| 19/11/2026 | T04 | Trung | `script/create_database.sql` (16 tables, constraints, indexes; soft delete; PBKDF2 hashes) and `script/sample_data.sql` (25 accounts in high / regular / low activity profiles, 1 Oct–19 Nov 2026, ≥3 cases per feature); tested on PostgreSQL 17 | F01–F21 | Done (uncommitted) |
 | 25/11 | T05 | Both | Final cross-check: every F-code has a screen and a screenshot; ERD ↔ script ↔ UI fields agree | F01–F21 | To do |
-| 25/11 | T02 | Trung | Decide on Chat Groups Activity/Monitoring tabs (keep with ERD support, or remove) | F15 | To do |
 | 26/11 | T08 | Trung | Assemble report: results table, contribution table (sum 100), README check, package zip (`src/`, `script/`, `git/`, report) | — | To do |
 | 27/11 | T09 | Each | Commit own work; save per-member commit screenshots to `git/` | — | To do |
 
@@ -51,14 +51,16 @@ Summary:
 - Run: `java -cp "src/user-client/target/classes;src/common/target/classes" chatapp.user.UserApp`, sign in as
   `mayachen` / `chatapp123` (every sample account uses this password; `ryanh` is locked).
 - Report: `03-02-02-user-application.tex` (screen table + figures); T03/T07 result rows and Hải's contribution
-  text in `02-task-assignment.tex`. The T03 evidence link is Figma for now; the code link/commit is added after Hải commits.
+  text in `02-task-assignment.tex`. Committed by Hải in `830c8ab`.
 
 ## Findings from the T05 cross-check (16/11)
 
-Blocking for V1:
-- `script/create_database.sql` is a placeholder (V1 requires it).
-- `git/` has no commit screenshots, and the contribution table has no percentages.
-- Hải has no commits yet. The User UI work is ready for him to commit (then add the commit link to the T03 row).
+Still open for V1:
+- `git/` has no commit screenshots yet (T09).
+
+Resolved on 18–19/11:
+- Hải committed the User UI (`830c8ab`); the contribution table is 50/50.
+- `script/create_database.sql` and `script/sample_data.sql` are written and tested on PostgreSQL 17 (T04).
 
 Resolved on 16/11 (later):
 - User UI screens are built (F01–F12), with report section and screenshots (T03, T07).
@@ -70,9 +72,10 @@ Resolved on 16/11:
 - The admin identity was a made-up person. It is now "Admin".
 - Groups were matched by name. They now use ids.
 
-Open for the T05 final check:
-- Chat Groups Activity/Monitoring tabs and lock history need ERD support or removal (see `ADMIN_UI.md`).
-- The ERD needs a decision on storing encrypted group content (`Conversation.isEncrypted` is only a flag).
+Resolved on 19/11:
+- Chat Groups Activity/Monitoring tabs and lock history are kept, backed by `GroupEvent` and `AccountLockLog`.
+- Group encryption is end-to-end: per-user RSA keys (`UserKey`), versioned AES group keys (`GroupKey`) wrapped per
+  member (`GroupKeyShare`), rotated when a member leaves or is removed; `Message.keyVersion` marks encrypted messages.
 
 ## After V1 (Version 2 outline)
 

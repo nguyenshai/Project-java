@@ -89,7 +89,7 @@ Sorting is done by clicking a column header (`Ui.table` enables `setAutoCreateRo
 ### Extras beyond the spec
 - Spam Reports → **By account** (report count, prior locks, lock history per account).
 - Sign-in metrics and charts on Account History, Login History and Activity; **Sign-ins** and **Messages sent** graphs on Overview.
-- Chat Groups → **Activity** and **Monitoring** tabs (see Future items).
+- Chat Groups → **Activity** and **Monitoring** tabs (backed by the `GroupEvent` table; see Database support).
 
 ## Test contract
 
@@ -103,13 +103,13 @@ together with the UI.
 `new-accounts`, `groups`, `spam-reports`, `overview`, `active-users`, `friend-counts`, `activity`.
 They are rendered at 1280×800 from `AdminFrame.createContent()`. Re-capture them whenever visible UI changes.
 
-## Future items (decide when finalizing V1)
+## Database support for the extras (decided 19/11/2026)
 
-- **Chat Groups → Activity / Monitoring tabs.** These are not required by the spec. They need group events
-  (rename, role change, removal vs. leaving) that the ERD does not store yet. Before submission, either
-  add a `GroupEvent` table to the ERD and script, or remove the tabs (also update the test that opens Monitoring,
-  the report table, and the screenshots).
-- **Lock history** (`LockAction`). This also has no ERD table. Add `AccountLockLog(userId, adminId, locked, at)` or drop the view.
+- **Chat Groups → Activity / Monitoring** are kept. The ERD has a `GroupEvent` table (created, renamed, member
+  added / left / removed, role changed, encryption on / off). Message rows come from `Message`.
+  `PreviewData.Event` is its preview stand-in.
+- **Lock history** is kept. The ERD has `AccountLockLog(userId, adminId, action, reason?, spamReportId?, createdAt)`;
+  `PreviewData.LockAction` is its preview stand-in.
 - Admin password update only validates the form in V1.
 
 ## Known issues (minor)

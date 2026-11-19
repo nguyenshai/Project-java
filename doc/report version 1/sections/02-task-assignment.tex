@@ -105,11 +105,9 @@ functions follow from the task code.
 Completion dates use the format \textit{dd/mm/yyyy} and are the day both members
 checked and accepted the work. Without a confirmed date, the date taken from the
 commit is noted in the table. The evidence is a link to the product or the
-matching commit: source code and the SQL script link to
-\href{https://github.com/nguyenshai/Project-java}{the team's GitHub};
-documents, images and the report link to
-\href{https://drive.google.com/drive/folders/1Kci4Ug_HXLRbBBFc0h6lVz0RbuvbcJTF?usp=sharing}
-{the team's Google Drive}.
+matching commit on
+\href{https://github.com/nguyenshai/Project-java}{the team's GitHub}, a Figma
+prototype, or the section of this report that holds the result.
 
 \begin{center}
 \small
@@ -147,14 +145,20 @@ documents, images and the report link to
     with sample data and automated tests. &
     18/11/2026 (check) & User prototype and source code &
     \href{https://www.figma.com/design/maCogjZs9eOOhfkxsOZoIU?node-id=129-930}{Figma};
-    \href{https://github.com/nguyenshai/Project-java/tree/main/src/user-client}{source code} \\
+    \href{https://github.com/nguyenshai/Project-java/tree/main/src/user-client}{source code};
+    \href{https://github.com/nguyenshai/Project-java/commit/830c8ab}{\texttt{830c8ab}} \\
   \hline
   \hyperlink{T07}{\texttt{T07}} & Nguyễn Sơn Hải &
     Write the User section, map F01--F12 and capture screenshots from the Swing app. &
     18/11/2026 (check) & User content and screenshots &
     Section~\ref{subsubsec:client-user}, Figure~\ref{fig:user-swing-chat} \\
   \hline
-  \rule{0pt}{1.15cm} & & & & & \\
+  \hyperlink{T04}{\texttt{T04}} & Châu Vũ Trung &
+    Finalise the ERD (16 entities, group encryption, group events, lock history);
+    write the PostgreSQL creation script and the shared sample data, tested on PostgreSQL 17. &
+    19/11/2026 (check) & ERD, data dictionary, \texttt{script/} &
+    Section~\ref{subsubsec:postgresql-database};
+    \href{https://github.com/nguyenshai/Project-java/tree/main/script}{\texttt{script/}} \\
   \hline
 \end{tabularx}
 \end{center}
@@ -194,5 +198,7 @@ content and the percentages before submitting the report, and the total is 100\%
 
 Both members agreed on the content and percentages above when V1 was completed.
 The evidence is checked against the results in Section~\ref{subsec:task-results},
-the commit history on GitHub and the documents on Google Drive; the number of
-commits is not the only criterion.
+the commit history on GitHub and the Figma prototypes; the number of commits is
+not the only criterion. AI assistance is declared in Section~\ref{sec:ai-usage}
+and does not change the shares, because each member reviewed and is responsible
+for their own results.
