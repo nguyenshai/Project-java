@@ -1,7 +1,7 @@
 \paragraph{Data dictionary}
 \mbox{}\par
 
-The table below describes the attributes of the 11 entities in the ERD. For a
+The table below describes the attributes of the 16 entities in the ERD. For a
 composite primary key, the attributes marked PK in the same entity form one key
 together; each attribute on its own does not have to be unique. Attributes without
 a question mark in the figure are expected to have a value; fields that may be
@@ -25,7 +25,8 @@ empty are noted in the key and nullability column.
   \hline
   \texttt{id} & \texttt{bigint} & PK; Required & Account identifier.\\
   \hline
-  \texttt{username} & \texttt{varchar} & UK; Required & Unique username; the upper/lower case rule is decided when the database is created.\\
+  \texttt{username} & \texttt{varchar} & UK; Required & Unique username (3--30 letters, digits, dots or
+  underscores), compared without regard to case among accounts that are not deleted.\\
   \hline
   \texttt{passwordHash} & \texttt{varchar} & Required & Password hash; passwords are never stored as plain text.\\
   \hline
@@ -41,9 +42,12 @@ empty are noted in the key and nullability column.
   \hline
   \texttt{systemRole} & \texttt{varchar} & Required & System role: \texttt{ADMIN} or \texttt{USER}.\\
   \hline
-  \texttt{status} & \texttt{varchar} & Required & Account status: \texttt{ACTIVE} or \texttt{LOCKED}.\\
+  \texttt{status} & \texttt{varchar} & Required & Account status: \texttt{ACTIVE}, \texttt{LOCKED} or
+  \texttt{DELETED} (deleted by an administrator; the row is kept).\\
   \hline
   \texttt{createdAt} & \texttt{timestamp} & Required & When the account was created; used for new-registration statistics.\\
+  \hline
+  \texttt{deletedAt} & \texttt{timestamp} & Nullable & When the account was deleted; set exactly when the status is \texttt{DELETED}.\\
   \hline
   \multicolumn{4}{|l|}{\textbf{FriendRequest}}\\*
   \hline
@@ -85,7 +89,8 @@ empty are noted in the key and nullability column.
   \hline
   \texttt{creatorId} & \texttt{bigint} & FK; Required & Account that created the conversation, references \texttt{UserAccount.id}.\\
   \hline
-  \texttt{isEncrypted} & \texttt{boolean} & Required & Flag for an encrypted group; it does not replace key management data.\\
+  \texttt{isEncrypted} & \texttt{boolean} & Required & Current encryption setting of a group: when true, new
+  messages are sent encrypted with the latest \texttt{GroupKey}; always false for private conversations.\\
   \hline
   \texttt{createdAt} & \texttt{timestamp} & Required & When the conversation or group was created.\\
   \hline
@@ -111,7 +116,11 @@ empty are noted in the key and nullability column.
   \hline
   \texttt{senderId} & \texttt{bigint} & FK; Required & Sender; with \texttt{conversationId} it references the key of \texttt{ConversationMember}.\\
   \hline
-  \texttt{content} & \texttt{text} & Required & Message content. How encrypted content is stored still needs to be designed.\\
+  \texttt{content} & \texttt{text} & Required & Message text; for an encrypted message, the Base64 of the IV
+  followed by the AES-GCM ciphertext, which the server cannot read.\\
+  \hline
+  \texttt{keyVersion} & \texttt{integer} & Nullable & Version of the group key that encrypted the message; with
+  \texttt{conversationId} it references \texttt{GroupKey}. Empty for plain-text messages.\\
   \hline
   \texttt{sentAt} & \texttt{timestamp} & Required & When the message was sent; used to order the history and filter by time.\\
   \hline
@@ -135,9 +144,13 @@ empty are noted in the key and nullability column.
   \hline
   \texttt{reportedUserId} & \texttt{bigint} & FK; Required & Reported account, references \texttt{UserAccount.id}.\\
   \hline
-  \texttt{messageId} & \texttt{bigint} & FK; Required & Related message, references \texttt{Message.id}.\\
+  \texttt{messageId} & \texttt{bigint} & FK; Required & Related message, references \texttt{Message.id};
+  \texttt{(reporterId, messageId)} is unique, so a user reports a message only once.\\
   \hline
   \texttt{reason} & \texttt{text} & Required & Reason or description of the report.\\
+  \hline
+  \texttt{reportedContent} & \texttt{text} & Nullable & Plain-text copy of an encrypted message, sent by the
+  reporter's client so the administrator can review it; empty when the message is not encrypted.\\
   \hline
   \texttt{createdAt} & \texttt{timestamp} & Required & When the report was sent; used for filtering and sorting.\\
   \hline
@@ -157,9 +170,92 @@ empty are noted in the key and nullability column.
   \hline
   \texttt{openedAt} & \texttt{timestamp} & Required & When the app was opened; used for app-open and active-user statistics.\\
   \hline
+  \multicolumn{4}{|l|}{\textbf{UserKey}}\\*
+  \hline
+  \texttt{userId} & \texttt{bigint} & PK, FK; Required & Key owner, references \texttt{UserAccount.id}; one key pair per account.\\
+  \hline
+  \texttt{publicKey} & \texttt{text} & Required & RSA public key (Base64) that other members use to wrap group keys for this user.\\
+  \hline
+  \texttt{encryptedPrivateKey} & \texttt{text} & Required & RSA private key encrypted on the client with a key
+  derived from the user's password; the server never sees it in plain form.\\
+  \hline
+  \texttt{keySalt} & \texttt{varchar} & Required & Random salt for the password-based key derivation (PBKDF2).\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the key pair was created or replaced.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{GroupKey}}\\*
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & Composite PK, FK; Required & Encrypted group, references \texttt{Conversation.id}.\\
+  \hline
+  \texttt{keyVersion} & \texttt{integer} & Composite PK; Required & Key version in the group, starting at 1 and
+  increased on every rotation.\\
+  \hline
+  \texttt{createdById} & \texttt{bigint} & FK; Required & Group admin whose client created the key, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the key version was created.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{GroupKeyShare}}\\*
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & Composite PK, FK; Required & Group of the key; with
+  \texttt{keyVersion} it references \texttt{GroupKey}.\\
+  \hline
+  \texttt{keyVersion} & \texttt{integer} & Composite PK, FK; Required & Key version that is shared.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & Composite PK, FK; Required & Member who receives the key, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{wrappedKey} & \texttt{text} & Required & The AES group key encrypted with this member's public key (Base64).\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{GroupEvent}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Group event identifier.\\
+  \hline
+  \texttt{conversationId} & \texttt{bigint} & FK; Required & Group concerned, references \texttt{Conversation.id}.\\
+  \hline
+  \texttt{actorId} & \texttt{bigint} & FK; Nullable & Member who made the change, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{targetUserId} & \texttt{bigint} & FK; Nullable & Member affected (added, removed, left, role changed),
+  references \texttt{UserAccount.id}; empty for events about the group itself.\\
+  \hline
+  \texttt{type} & \texttt{varchar} & Required & \texttt{CREATED}, \texttt{RENAMED}, \texttt{MEMBER\_ADDED},
+  \texttt{MEMBER\_LEFT}, \texttt{MEMBER\_REMOVED}, \texttt{ROLE\_CHANGED}, \texttt{ENCRYPTION\_ON} or
+  \texttt{ENCRYPTION\_OFF}.\\
+  \hline
+  \texttt{oldValue} & \texttt{varchar} & Nullable & Value before the change, such as the old group name or role.\\
+  \hline
+  \texttt{newValue} & \texttt{varchar} & Nullable & Value after the change.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the event happened.\\
+  \hline
+  \multicolumn{4}{|l|}{\textbf{AccountLockLog}}\\*
+  \hline
+  \texttt{id} & \texttt{bigint} & PK; Required & Lock log identifier.\\
+  \hline
+  \texttt{userId} & \texttt{bigint} & FK; Required & Account locked or unlocked, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{adminId} & \texttt{bigint} & FK; Required & Administrator who acted, references \texttt{UserAccount.id}.\\
+  \hline
+  \texttt{action} & \texttt{varchar} & Required & \texttt{LOCK} or \texttt{UNLOCK}.\\
+  \hline
+  \texttt{reason} & \texttt{text} & Nullable & Optional note from the administrator.\\
+  \hline
+  \texttt{spamReportId} & \texttt{bigint} & FK; Nullable & Spam report that led to the lock, references
+  \texttt{SpamReport.id}; empty when the lock was made from account management.\\
+  \hline
+  \texttt{createdAt} & \texttt{timestamp} & Required & When the action happened; used for lock history and prior-lock counts.\\
+  \hline
 \end{longtable}
 \endgroup
 
-Timestamps used for sorting and statistics must be stored and interpreted in one
-consistent time zone when the script and the JDBC connection are created. Usernames,
-emails, account status and request status also need consistent value conventions.
+The PostgreSQL script \texttt{script/create\_database.sql} implements this table.
+Names become snake\_case (\texttt{ConversationMember.joinedAt} is
+\texttt{conversation\_member.joined\_at}); identifiers are identity columns;
+timestamps are stored as \texttt{timestamptz} and the database time zone is
+\texttt{Asia/Ho\_Chi\_Minh}, so a reporting year runs from 1 January 00:00 local time
+to the next 1 January. Value lists such as the account and request status are
+\texttt{varchar} columns limited by \texttt{CHECK} constraints~\cite{ref:postgresql}.
+Password hashes use PBKDF2 with a random salt per account~\cite{ref:rfc8018}.
+\texttt{script/sample\_data.sql} loads sample data that simulates use of the system
+from 1 October to 19 November 2026: 25 accounts in three activity profiles (highly
+active, regular, and occasional or new), seven groups of two to six members, and at
+least three cases of every feature. Every account uses the password
+\texttt{chatapp123}.

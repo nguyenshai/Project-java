@@ -1,13 +1,17 @@
 \paragraph{Entity relationship diagram}
 \mbox{}\par
 
-The ERD has 11 entities, grouped into accounts, friendships, conversations and
-messages, spam reports, and sign-ins and activity. \texttt{Conversation} is shared
+The ERD has 16 entities, grouped into accounts, friendships, conversations and
+messages, group encryption keys (\texttt{UserKey}, \texttt{GroupKey},
+\texttt{GroupKeyShare}), spam reports and moderation (\texttt{SpamReport},
+\texttt{AccountLockLog}), group events (\texttt{GroupEvent}), and sign-ins and
+activity. \texttt{Conversation} is shared
 by private conversations and group chats, told apart by the \texttt{type}
 attribute. Members and their rights in each conversation are managed through
 \texttt{ConversationMember}.
 
-Figure~\ref{fig:erd-chatapp-v1} shows the whole model. The attributes are
+Figure~\ref{fig:erd-chatapp-v1}, drawn with draw.io~\cite{ref:drawio}, shows the
+whole model. The attributes are
 described again in Table~\ref{tab:data-dictionary} for easy reference.
 In the figure, PK is a primary key, FK a foreign key and UK a unique value;
 a question mark marks an attribute that may have no value. The symbols 1 and 0..N
@@ -23,5 +27,6 @@ show a one-to-many relationship, where the many side may have no records yet.
 \end{landscape}
 
 Entity and attribute names in the text match the diagram. Data types in the ERD
-are logical; string lengths, default values and the on-delete policy are decided
-when the PostgreSQL script is finished.
+are logical; string lengths, default values and the on-delete policy are set in
+\texttt{script/create\_database.sql}; the naming and type conventions are given
+after Table~\ref{tab:data-dictionary}.
