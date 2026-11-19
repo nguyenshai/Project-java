@@ -6,7 +6,8 @@
 The chat system follows a client--server model: two Windows desktop applications,
 one for administrators and one for users, a Spring Boot backend and a PostgreSQL
 database. Both client applications are planned in Java Swing and talk to the
-backend over TCP sockets, without WebSocket.
+backend over TCP sockets, without WebSocket. Swing, socket programming and JDBC
+follow the course material~\cite{ref:course-slides}.
 
 The administrator application provides the interface for managing and monitoring
 the system; the user application provides the interface for the account, friends
@@ -35,18 +36,18 @@ connect to the database directly.
   \textbf{Component} & \textbf{Technology} & \textbf{Purpose}\\
   \hline
   \endhead
-  Programming language & Java 21 & Build the client applications and the backend\\
+  Programming language & Java 21~\cite{ref:java21} & Build the client applications and the backend\\
   \hline
   Windows interface & Java Swing & Build the administrator and user interfaces\\
   \hline
-  Backend framework & Spring Boot & Organise the backend and the business logic\\
+  Backend framework & Spring Boot~\cite{ref:spring-boot} & Organise the backend and the business logic\\
   \hline
   Client--server communication & TCP sockets &
   Exchange requests, responses and messages between clients and the server\\
   \hline
-  Database & PostgreSQL & Store the system data\\
+  Database & PostgreSQL~\cite{ref:postgresql} & Store the system data\\
   \hline
-  Data access & JDBC and the PostgreSQL JDBC Driver &
+  Data access & JDBC and the PostgreSQL JDBC Driver~\cite{ref:pgjdbc} &
   Connect the backend to the database and run queries\\
   \hline
   Project management & Maven & Manage libraries, compile and package the applications\\

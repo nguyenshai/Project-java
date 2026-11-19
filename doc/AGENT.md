@@ -34,8 +34,8 @@ Both members share the DB design and the script. Each member must commit their o
 | `doc/UI_PLAN.md` | V1 UI plan by report task (T01–T09), by date |
 | `doc/USER_UI.md` | User UI reference (as built): pre-login flow, Chat / Group / Friend / Account pages, feature → page map, rules, tests |
 | `doc/report version 1/main.tex` | Report (English LaTeX). Keep `config/ cover/ sections/ images/` beside it |
-| `doc/report version 1/images/ERD-chatapp-v1.drawio` | ERD source (11 entities) |
-| `script/create_database.sql` | DB script (placeholder; must follow the ERD) |
+| `doc/report version 1/images/ERD-chatapp-v1.drawio` | ERD source (16 entities) |
+| `script/` | `create_database.sql` (schema, follows the ERD), `sample_data.sql` (shared sample data, edited by hand), `README.md` (how to run, formats) |
 | `git/` | Commit screenshots for submission (not `.git/`) |
 | Figma `maCogjZs9eOOhfkxsOZoIU` | Admin design (`admin - …` pages) and User design (`user - …` pages, components in `user - Chat › 00 · Shared user components`) |
 | `doc/figma/user-ui-plugin/` | Fallback plugin that regenerates a User UI draft offline (the real design is in the Figma file) |

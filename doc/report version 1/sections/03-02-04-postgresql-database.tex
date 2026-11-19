@@ -83,9 +83,10 @@ settings are managed by the backend; the Admin Client and the User Client only
 exchange requests and results with the server over TCP sockets.
 
 The logical design below turns the data groups into the planned entities,
-attributes, keys and relationships. It is the basis for the database creation
-script in V1; connecting the applications to the data belongs to the next
-implementation stage.
+attributes, keys and relationships. It is implemented in V1 by
+\texttt{script/create\_database.sql}, with shared sample data in
+\texttt{script/sample\_data.sql}; connecting the applications to the data belongs
+to the next implementation stage.
 
 \input{sections/database/01-erd}
 \input{sections/database/02-data-dictionary}

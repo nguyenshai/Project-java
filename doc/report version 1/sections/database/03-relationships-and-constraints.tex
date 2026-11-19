@@ -33,12 +33,27 @@ for example the sender and the receiver of a friend request.
   \item \textbf{Accounts and activity:}
     each \texttt{LoginHistory} or \texttt{AppOpenEvent} record
     belongs to one account; an account can have many records over time.
+  \item \textbf{Encryption keys:}
+    each account has at most one \texttt{UserKey}. A group has many
+    \texttt{GroupKey} versions, keyed by \texttt{(conversationId, keyVersion)};
+    each version has one \texttt{GroupKeyShare} per member who may read it.
+    \texttt{Message.(conversationId, keyVersion)} references the key version
+    used to encrypt the message.
+  \item \textbf{Group events:}
+    a group has many \texttt{GroupEvent} records; \texttt{actorId} and
+    \texttt{targetUserId} reference the accounts involved.
+  \item \textbf{Account locks:}
+    \texttt{AccountLockLog} references the affected account, the acting
+    administrator and, optionally, the \texttt{SpamReport} that led to the lock.
 \end{itemize}
 
 \paragraph{Planned constraints and data rules}
 \mbox{}\par
 
-Primary keys, foreign keys and unique constraints are planned in the database.
+Primary keys, foreign keys, unique constraints and \texttt{CHECK} constraints are
+implemented in \texttt{script/create\_database.sql}; for example, a message's sender
+must be a member of its conversation, a key share can only go to a member, and a
+spam report must point to a message written by the reported account.
 Rules about access rights, membership status or changing several records at once
 are also checked by the backend; the keys in the ERD alone are not enough for
 the whole business logic.
@@ -77,6 +92,14 @@ the whole business logic.
   \item \textbf{Spam reports:} the reporter must be allowed to see the related
     content; the reported message must belong to the reported account.
     The backend checks these conditions on top of the foreign keys.
+  \item \textbf{Encryption and logs:} a key share can only go to someone with a
+    membership record in the group, and a message can only name a key version of
+    its own conversation (foreign keys); the backend also ensures that keys exist
+    only for group conversations, that \texttt{Message.keyVersion} stays empty in
+    private conversations and that a new key version is shared only with current
+    members. \texttt{AccountLockLog.action} is \texttt{LOCK} or \texttt{UNLOCK},
+    \texttt{GroupEvent.type} takes only the listed values, and a user can report
+    the same message only once (check and unique constraints).
   \item \textbf{Consistency:} accepting a friend request updates the request and
     creates the friendship in the same transaction. Blocking and unfriending also
     apply their related changes together to avoid contradictory states.
@@ -92,12 +115,46 @@ history is cleared for that member. When messages are read, hidden messages and
 messages before that point are not shown to that person; other participants keep
 their history. The team confirms this interpretation when the design is finalised.
 
-The \texttt{Conversation.isEncrypted} attribute only records whether a group is
-encrypted. The current ERD does not yet describe key management, key changes or
-the format of encrypted content; this must be completed before the data design
-can be said to fully support group encryption. Likewise, the policy for keeping or
-handling related data when an account is deleted must be decided before the
-foreign key behaviour in the script is final.
+Group encryption follows the end-to-end model of encrypted group chats in
+Facebook Messenger~\cite{ref:messenger-e2ee}: the server stores and forwards only ciphertext and never
+holds a group key in plain form.
+
+\begin{enumerate}
+  \item \textbf{User keys:} at registration the client creates an RSA key pair~\cite{ref:rfc8017}.
+    The public key is stored in \texttt{UserKey.publicKey}; the private key is
+    encrypted on the client with a key derived from the password (PBKDF2~\cite{ref:rfc8018} with
+    \texttt{keySalt}), so the user can sign in from any computer.
+  \item \textbf{Turning encryption on:} the client of a group admin creates a
+    random AES-256 group key (version 1), wraps it with every member's public key
+    and uploads one \texttt{GroupKeyShare} per member;
+    \texttt{Conversation.isEncrypted} becomes true.
+  \item \textbf{Sending and reading:} the sender encrypts the text with the latest
+    key version (AES-GCM~\cite{ref:nist-gcm}, a new IV per message) and stores the version in
+    \texttt{Message.keyVersion}; members unwrap the matching share with their
+    private key to decrypt.
+  \item \textbf{Membership changes:} a new member receives a share of the current
+    version. When a member leaves or is removed, an admin's client creates a new
+    version and shares it only with the remaining members, so the former member
+    cannot read later messages.
+  \item \textbf{Turning encryption off:} new messages are stored as plain text with
+    an empty \texttt{keyVersion}; earlier messages stay encrypted.
+\end{enumerate}
+
+Because the server cannot read encrypted messages, searching them is done on the
+client after decryption, the AI assistant is not available in encrypted groups,
+and a spam report on an encrypted message carries a plain-text copy in
+\texttt{SpamReport.reportedContent} sent by the reporter. Changing a password only
+re-encrypts the private key. A password reset (a random password sent by email)
+cannot recover the old private key: the user receives a new key pair and can read
+older encrypted history again only after a group admin shares the keys with the
+new public key.
+
+Deleting an account is a soft delete: the administrator's action sets
+\texttt{status} to \texttt{DELETED} and records \texttt{deletedAt}, and no row is
+removed. Messages, group history, spam reports and lock history therefore stay
+complete, every foreign key to \texttt{UserAccount} rejects physical deletion, and a
+deleted account can no longer sign in or be found. Its username and email may be
+registered again, because uniqueness only applies to accounts that are not deleted.
 
 \paragraph{Data for statistics}
 \mbox{}\par
@@ -135,9 +192,20 @@ months.
 
 \paragraph{Data for administration extensions}
 \mbox{}\par
-The current ERD supports the \texttt{ACTIVE}/\texttt{LOCKED} status and spam reports.
-The lock/unlock log in the prototype is an extension that needs the time, the
-affected account and the administrator who acted. The group activity log can take
-message times and join/leave times from the existing tables. To tell leaving apart
-from being removed, or to record renames and role changes, event records must be
-added before those items are implemented.
+\texttt{UserAccount.status} holds the current \texttt{ACTIVE}/\texttt{LOCKED}
+state, and \texttt{AccountLockLog} keeps its history: each lock or unlock records
+the account, the administrator, the time and, when it comes from the spam report
+screen, the report. The \textbf{Prior locks} count and the \textbf{Admin lock
+history} on the Spam Reports screen read from this table. The backend checks that
+\texttt{adminId} belongs to an account with \texttt{systemRole = ADMIN} and
+updates the status and the log in one transaction.
+
+The \textbf{Activity} and \textbf{Monitoring} tabs of Chat Groups combine two
+sources. Message rows come from \texttt{Message} (an encrypted message is shown
+only as ``sent an encrypted message''). Every other change is a
+\texttt{GroupEvent} written by the backend in the same transaction as the change
+itself: creating the group, renaming it, adding a member, a member leaving or
+being removed, a role change, and turning encryption on or off.
+\texttt{ConversationMember} alone cannot provide this, because it keeps one row per
+member, cannot tell leaving from being removed, and overwrites \texttt{joinedAt}
+when a member is added again.

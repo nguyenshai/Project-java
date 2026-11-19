@@ -13,7 +13,8 @@ Final project for "Java Application Programming", class 24KTPM2.
   the Chat, Group, Friend and Account pages (F01–F12), driven by an in-memory `PreviewServer` and covered by
   `UserUiTest`. Sign in as `mayachen` / `chatapp123`. See [`doc/USER_UI.md`](doc/USER_UI.md).
 - **Server, common:** empty package skeletons. There is no server main class yet.
-- **Database script:** placeholder (`script/create_database.sql`). The ERD is in the report.
+- **Database:** `script/create_database.sql` (PostgreSQL 17 schema, 16 tables) and `script/sample_data.sql`
+  (the team's shared sample data). See [`script/README.md`](script/README.md). The ERD is in the report.
 
 V1 focuses on UI and database design. The plan and remaining work are in [`doc/UI_PLAN.md`](doc/UI_PLAN.md).
 User UI reference: [`doc/USER_UI.md`](doc/USER_UI.md).
@@ -30,7 +31,7 @@ Project/
 │   ├── user-client/              # Swing app for users
 │   ├── admin-client/             # Swing app for administrators
 │   └── server/                   # Spring Boot (no web), services, JDBC, TCP
-├── script/create_database.sql    # PostgreSQL creation script
+├── script/                       # create_database.sql, sample_data.sql, README.md (PostgreSQL 17)
 ├── doc/
 │   ├── Final Project.pdf         # Assignment spec
 │   ├── ADMIN_UI.md, UI_PLAN.md, USER_UI.md, AGENT.md
@@ -82,7 +83,8 @@ Both apps run on the same in-memory sample data, and changes last until the wind
 | User (`UserApp`) | `linhng`, `owentran`, `ryanh` | Locked by an administrator: sign-in shows the lock error. |
 | Admin (`AdminApp`) | any non-empty username and password, e.g. `admin` / `admin` | V1 only checks that both fields are filled; the server checks the ADMIN role in V2. |
 
-V1 keeps passwords as plain text in the preview data. The database design stores only password hashes.
+V1 keeps passwords as plain text in the preview data. The database stores only PBKDF2 password hashes.
+The database sample data (`script/sample_data.sql`) is larger than the in-memory preview data and does not match it one to one.
 
 To edit the report, open `doc/report version 1/main.tex`. Keep the `config`, `cover`, `sections` and
 `images` folders next to it so `\input` and image paths resolve.
