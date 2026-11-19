@@ -137,6 +137,12 @@ public final class Ui {
                 BorderFactory.createEmptyBorder(7, 10, 7, 10)));
         f.setToolTipText(hint);
         f.getAccessibleContext().setAccessibleName(hint);
+        // The hint depends on focus, but Swing only repaints the caret's strip on a focus
+        // change; without a full repaint the caret erases the hint's first letter.
+        f.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override public void focusGained(java.awt.event.FocusEvent e) { f.repaint(); }
+            @Override public void focusLost(java.awt.event.FocusEvent e) { f.repaint(); }
+        });
         return f;
     }
 
